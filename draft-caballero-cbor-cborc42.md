@@ -61,7 +61,7 @@ Note: unlike the CBOR/c specification, no opinion on signing mechanics is expres
 
 The primary goal with this specification, is enabling application developers to configure CBOR tooling for this profile in as language-agnostic a way as possible.
 The historical design of this profile was to maximize determinism and simplicity for an internet-scale directed acyclical graph of CBOR documents linked to one another by binary hashes.
-These simple content identifiers, defined in Appendix A, are always expressed as bytestrings of tag 42 (similar in design to to [RFC6920] Named Information Hashes).
+These simple content identifiers, defined in Appendix A, are always expressed as bytestrings of tag 42 (similar in design to [RFC6920] Named Information Hashes).
 All other tags, and many major and minor types, are forbidden to reduce ambiguity, and developers are encouraged to express many kinds of data at higher layers by using the supported types (such as strings or bytestrings).
 
 ## Requirements Language
@@ -103,6 +103,7 @@ As in CBOR/c, deterministic encoding is mandatory. The encoding scheme adheres t
   - Appendix B.1 features a list of integer sample values and their expected encoding.
 - RFC+: UNLIKE CBOR/c and standard CDE encoding, floating-point numbers MUST always be encoded using the longest [IEEE754] variant. Appendix B.2 features a list of floating-point sample values and their expected encoding.
 - RFC+: NaN values with payloads (like f97e01), or having the most significant bit set ("signaling"), MUST be rejected. See also Appendix B.4 for invalid NaN variants.
+- RCF+: UNLIKE CBOR/c and standard CDE encoding, map keys MUST be typed as strings; no other types are allowed as map keys.
 - RFC: Map keys MUST be sorted in the bytewise lexicographic order of their deterministic encoding. Duplicate keys (i.e. keys with identical determinstic bytestring values) MUST be rejected; note that semantic equivalence is not tested. As per the "Canonical CBOR" section (3.9) in [RFC7049], the following represents a properly sorted map:
 {
   "a": ... ,
