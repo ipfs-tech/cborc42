@@ -70,10 +70,10 @@ All other tags, and many major and minor types, are forbidden to reduce ambiguit
 
 ## Common Definitions
 
-* This document uses the conventions defined in CDDL [RFC8610] for expressing the type of CBOR [RFC8949] data items.
-* Examples showing CBOR data, are expressed in "diagnostic notation" as defined in Section 8 of [RFC8949].
-* The term "CBOR object" is equivalent to "CBOR data item" used in [RFC8949].
-* The term "CBOR Core" is in this document abbreviated to "CBOR/c".
+- This document uses the conventions defined in CDDL [RFC8610] for expressing the type of CBOR [RFC8949] data items.
+- Examples showing CBOR data, are expressed in "diagnostic notation" as defined in Section 8 of [RFC8949].
+- The term "CBOR object" is equivalent to "CBOR data item" used in [RFC8949].
+- The term "CBOR Core" is in this document abbreviated to "CBOR/c".
 
 # Specification
 
@@ -96,7 +96,21 @@ This section describes how CBOR/c-42 subsets CBOR and differs from a standard CD
 
 ## Deterministic Encoding Scheme Profile
 
+As in CBOR/c, deterministic encoding is mandatory. The encoding scheme adheres to Section 4.2 of [RFC8949], but adds a few constraints (denoted below by RFC+), where this RFC offers choices. The following list contains a summary of the deterministic encoding rules:
 
+- RFC+: Floating-point and integer objects MUST be treated as distinct types regardless of their numeric value. This is compliant with Rule 2 in Section 4.2.2 of [RFC8949].
+- RFC: Integers, represented by the int and bigint types, MUST use the int type if the value is between -264 and 264-1, otherwise the bigint type MUST be used.
+  - Appendix B.1 features a list of integer sample values and their expected encoding.
+- RFC+: UNLIKE CBOR/c and standard CDE encoding, floating-point numbers MUST always be encoded using the longest [IEEE754] variant. Appendix B.2 features a list of floating-point sample values and their expected encoding.
+- RFC+: NaN values with payloads (like f97e01), or having the most significant bit set ("signaling"), MUST be rejected. See also Appendix B.4 for invalid NaN variants.
+- RFC: Map keys MUST be sorted in the bytewise lexicographic order of their deterministic encoding. Duplicate keys (i.e. keys with identical determinstic bytestring values) MUST be rejected; note that semantic equivalence is not tested. As per the "Canonical CBOR" section (3.9) in [RFC7049], the following represents a properly sorted map:
+{
+  "a": ... ,
+  "b": ... ,
+  "aa": ...
+}
+- RFC+: Since CBOR encodings according to this specification maintain uniqueness, there are no specific restrictions or tests needed in order to determine map key equivalence. As an (extreme) example, the floating-point numbers 0.0 and -0.0, and the integer number 0 could represent the distinct keys f90000, f98000, and 00 respectively.
+- RFC: Indefinite length objects MUST be rejected.
 
 ## CBOR Tool Requirements
 
@@ -110,7 +124,128 @@ This document has no IANA actions.
 
 --- back
 
-# Binary Content Identifiers (Tag 42)
+# Binary Content Identifiers
+
+**TODO - copy spec out from** [multiformats/cid](https://github.com/multiformats/cid?tab=readme-ov-file#how-does-it-work) simplifying a bit in the process.
+
+# Test Vectors: Integers
+
+| Diagnostic Notation	| CBOR Encoding |	Comment |
+|---|---|---|
+|0 | 00 | Smallest positive implicit int|
+|-1 | 20 | Smallest negative implicit int|
+|23 | 17 | Largest positive implicit int|
+|-24 | 37 | Largest negative implicit int|
+|24 | 1818 | Smallest positive one-byte int|
+|-25 | 3818 | Smallest negative one-byte int|
+|255 | 18ff | Largest positive one-byte int|
+|-256 | 38ff | Largest negative one-byte int|
+|256 | 190100 | Smallest positive two-byte int|
+|-257 | 390100 | Smallest negative two-byte int|
+|65535 | 19ffff | Largest positive two-byte int|
+|-65536 | 39ffff | Largest negative two-byte int|
+|65536 | 1a00010000 | Smallest positive four-byte int|
+|-65537 | 3a00010000 | Smallest negative four-byte int|
+|4294967295 | 1affffffff | Largest positive four-byte int|
+|-4294967296 | 3affffffff | Largest negative four-byte int|
+|4294967296 | 1b0000000100000000 | Smallest positive eight-byte int|
+|-4294967297 | 3b0000000100000000 | Smallest negative eight-byte int|
+|18446744073709551615 | 1bffffffffffffffff | Largest positive eight-byte int|
+|-18446744073709551616 | 3bffffffffffffffff | Largest negative eight-byte int|
+|18446744073709551616 | c249010000000000000000 | Smallest positive bigint|
+|-18446744073709551617 | c349010000000000000000 | Smallest negative bigint|
+
+# Test Vectors: Floating Point Numbers
+
+**TODO - Update this entire chart!**
+
+The textual representation of the values is based on the serialization method for the Number data type, defined by [ECMASCRIPT] with one change: to comply with diagnostic notation (section 8 of [RFC8949]), all values are expressed as floating-point numbers. The rationale for using [ECMASCRIPT] serialization is because it is supposed to generate the shortest and most correct representation of [IEEE754] numbers.
+
+| Diagnostic Notation | CBOR Encoding | Comment |
+|----|----|----|
+| 0.0 | f90000 | Zero |
+| -0.0 | f98000 | Negative zero |
+| Infinity | f97c00 | Infinity |
+| -Infinity | f9fc00 | Negative infinity |
+| NaN | f97e00 | Not a number |
+| 5.960464477539063e-8 | f90001 | Smallest positive subnormal float16 |
+| 0.00006097555160522461 | f903ff | Largest positive subnormal float16 |
+| 0.00006103515625 | f90400 | Smallest positive float16 |
+| 65504.0 | f97bff | Largest positive float16 |
+| 1.401298464324817e-45 | fa00000001 | Smallest positive subnormal float32 |
+| 1.1754942106924411e-38 | fa007fffff | Largest positive subnormal float32 |
+| 1.1754943508222875e-38 | fa00800000 | Smallest positive float32 |
+| 3.4028234663852886e+38 | fa7f7fffff | Largest positive float32 |
+| 5.0e-324 | fb0000000000000001 | Smallest positive subnormal float64 |
+| 2.225073858507201e-308 | fb000fffffffffffff | Largest positive subnormal float64 |
+| 2.2250738585072014e-308 | fb0010000000000000 | Smallest positive float64 |
+| 1.7976931348623157e+308 | fb7fefffffffffffff | Largest positive float64 |
+| -0.0000033333333333333333 | fbbecbf647612f3696 | Randomly selected number |
+| 10.559998512268066 | fa4128f5c1 | -"- |
+| 10.559998512268068 | fb40251eb820000001 | Next in succession |
+| 295147905179352830000.0 | fa61800000 | 268 (diagnostic notation truncates precision) |
+| 2.0 | f94000 | Number without a fractional part |
+| -5.960464477539063e-8 | f98001 | Smallest negative subnormal float16 |
+| -5.960464477539062e-8 | fbbe6fffffffffffff | Adjacent smallest negative subnormal float16 |
+| -5.960464477539064e-8 | fbbe70000000000001 | -"- |
+| -5.960465188081798e-8 | fab3800001 | -"- |
+| 0.0000609755516052246 | fb3f0ff7ffffffffff | Adjacent largest subnormal float16 |
+| 0.000060975551605224616 | fb3f0ff80000000001 | -"- |
+| 0.000060975555243203416 | fa387fc001 | -"- |
+| 0.00006103515624999999 | fb3f0fffffffffffff | Adjacent smallest float16 |
+| 0.00006103515625000001 | fb3f10000000000001 | -"- |
+| 0.00006103516352595761 | fa38800001 | -"- |
+| 65503.99999999999 | fb40effbffffffffff | Adjacent largest float16 |
+| 65504.00000000001 | fb40effc0000000001 | -"- |
+| 65504.00390625 | fa477fe001 | -"- |
+| 1.4012984643248169e-45 | fb369fffffffffffff | Adjacent smallest subnormal float32 |
+| 1.4012984643248174e-45 | fb36a0000000000001 | -"- |
+| 1.175494210692441e-38 | fb380fffffbfffffff | Adjacent largest subnormal float32 |
+| 1.1754942106924412e-38 | fb380fffffc0000001 | -"- |
+| 1.1754943508222874e-38 | fb380fffffffffffff | Adjacent smallest float32 |
+| 1.1754943508222878e-38 | fb3810000000000001 | -"- |
+| 3.4028234663852882e+38 | fb47efffffdfffffff | Adjacent largest float32 |
+| 3.402823466385289e+38 | fb47efffffe0000001 | -"- |
+
+# Test Vectors: Miscellaneous Items
+
+|  Diagnostic Notation | CBOR Encoding | Comment |
+|----|----|----|
+| true | f5 | Boolean true |
+| null | f6 | Null |
+| simple(59) | f83b | Simple value |
+| 0("2025-03-30T12:24:16Z") | c074323032352d30332d33 |  |
+| 305431323a32343a31365a | ISO date/time |  |
+| \[1, \[2, 3\], \[4, 5\]\] | 8301820203820405 | Array combinations |
+| { |  |  |
+|  "a": 0, |  |  |
+|  "b": 1, |  |  |
+|  "aa": 2 |  |  |
+| } | a361610161620262616103 | Map object |
+| h'48656c6c6f2043424f5221' | 4b48656c6c6f2043424f5221 | Binary string |
+| "🚀 science" | 6cf09f9a8020736369656e6365 | Text string with emoji |
+
+# Test Vectors: Invalid Encodings
+
+**TODO - Add a bunch of normal stuff from the excluded major types to this
+**
+
+| CBOR Encoding | Diagnostic Notation | Comment Notes |
+|----|----|----|
+| a2616201616100 | { |  |
+|  "b": 1, |  |  |
+|  "a": 0 |  |  |
+| } | Improper map key ordering | 1, 2 |
+| 1900ff | 255 | Number with leading zero bytes |
+| c34a00010000000000000000 | -18446744073709551617 | Number with leading zero bytes |
+| Fa41280000 | 10.5 | Not in shortest encoding |
+| fa7fc00000 | NaN | Not in shortest encoding |
+| c243010000 | 65536 | Incorrect value for bigint |
+| f97e01 | NaN | NaN with payload |
+| 5f4101420203ff | (\_ h'01', h'0203') | Indefinite length object |
+| fc |  | Reserved |
+| f818 |  | Invalid simple value |
+| 5b0010000000000000 |  | Extremely large bstr length indicator: 4503599627370496 |
 
 # Acknowledgments
 {:numbered="false"}
