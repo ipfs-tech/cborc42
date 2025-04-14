@@ -118,9 +118,9 @@ Table of Contents
    directed acyclical graph of CBOR documents linked to one another by
    binary hashes.  These simple content identifiers, defined in
    Appendix A, are always expressed as bytestrings of tag 42 (similar in
-   design to to [RFC6920] Named Information Hashes).  All other tags,
-   and many major and minor types, are forbidden to reduce ambiguity,
-   and developers are encouraged to express many kinds of data at higher
+   design to [RFC6920] Named Information Hashes).  All other tags, and
+   many major and minor types, are forbidden to reduce ambiguity, and
+   developers are encouraged to express many kinds of data at higher
    layers by using the supported types (such as strings or bytestrings).
 
 1.2.  Requirements Language
@@ -204,6 +204,9 @@ Table of Contents
    *  RFC+: NaN values with payloads (like f97e01), or having the most
       significant bit set ("signaling"), MUST be rejected.  See also
       Appendix B.4 for invalid NaN variants.
+
+   *  RCF+: UNLIKE CBOR/c and standard CDE encoding, map keys MUST be
+      typed as strings; no other types are allowed as map keys.
 
    *  RFC: Map keys MUST be sorted in the bytewise lexicographic order
       of their deterministic encoding.  Duplicate keys (i.e. keys with
