@@ -9,20 +9,20 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: CBOR Working Group
+area: ""
+workgroup: "Concise Binary Object Representation Maintenance and Extensions"
 keyword:
  - CBOR
  - CBOR/c
  - deterministic encoding
  - sparkling distributed ledger
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: ipfs-tech/cborc42
-  latest: https://example.com/LATEST
+  group: "Concise Binary Object Representation Maintenance and Extensions"
+  type: ""
+  mail: "cbor@ietf.org"
+  arch: "https://www.ietf.org/mail-archive/web/cbor/current/maillist.html"
+  github: "ipfs-tech/cborc42"
+  latest: "https://ipfs-tech.github.io/cborc42/draft-caballero-cbor-cborc42.html"
 
 author:
  -
