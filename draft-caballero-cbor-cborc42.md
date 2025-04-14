@@ -35,13 +35,11 @@ author:
     email: robin@berjon.com
 
 normative:
-
-- RFC8610
-- RFC8949
+  RFC8610:
+  RFC8949:
 
 informative:
-
-- RFC6920
+  RFC6920:
 
 --- abstract
 
@@ -79,9 +77,26 @@ All other tags, and many major and minor types, are forbidden to reduce ambiguit
 
 # Specification
 
+This section describes how CBOR/c-42 subsets CBOR and differs from a standard CDE encoding.
+
 ## Supported CBOR Objects
 
+| CBOR | Comment |
+| --- | --- |
+| int |	Integer |
+| bigint | Big integer |
+| float	| 64-bit [IEEE754] numbers ONLY |
+| tstr | Text string encoded as UTF-8 [RFC3629] |
+| bstr | Byte string |
+| [] | Array |
+| {} | Map |
+| tag 42 | See Appendix A; no other tags allowed |
+| bool | Boolean true and false (major type 7) |
+| null | Represents a null object (major type 7) |
+
 ## Deterministic Encoding Scheme Profile
+
+
 
 ## CBOR Tool Requirements
 
