@@ -260,10 +260,18 @@ Table of Contents
 
 5.2.  Informative References
 
+   [RFC3629]  Yergeau, F., "UTF-8, a transformation format of ISO
+              10646", STD 63, RFC 3629, DOI 10.17487/RFC3629, November
+              2003, <https://www.rfc-editor.org/rfc/rfc3629>.
+
    [RFC6920]  Farrell, S., Kutscher, D., Dannewitz, C., Ohlman, B.,
               Keranen, A., and P. Hallam-Baker, "Naming Things with
               Hashes", RFC 6920, DOI 10.17487/RFC6920, April 2013,
               <https://www.rfc-editor.org/rfc/rfc6920>.
+
+   [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
+              October 2013, <https://www.rfc-editor.org/rfc/rfc7049>.
 
 Appendix A.  Binary Content Identifiers
 
@@ -570,8 +578,8 @@ Appendix D.  Test Vectors: Miscellaneous Items
 
 Appendix E.  Test Vectors: Invalid Encodings
 
-   **TODO - Add a bunch of normal stuff from the excluded major types to
-   this **
+   *TODO - Add a bunch of normal stuff from the excluded major types to
+   this*
 
     +==========================+=====================+================+
     | CBOR Encoding            |Diagnostic Notation  |Comment Notes   |

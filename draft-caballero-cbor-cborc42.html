@@ -1316,7 +1316,8 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">tstr</td>
-              <td class="text-left" rowspan="1" colspan="1">Text string encoded as UTF-8 [RFC3629]</td>
+              <td class="text-left" rowspan="1" colspan="1">Text string encoded as UTF-8 <span>[<a href="#RFC3629" class="cite xref">RFC3629</a>]</span>
+</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">bstr</td>
@@ -1374,7 +1375,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
             <p id="section-2.2-2.5.1">RCF+: UNLIKE CBOR/c and standard CDE encoding, map keys <span class="bcp14">MUST</span> be typed as strings; no other types are allowed as map keys.<a href="#section-2.2-2.5.1" class="pilcrow">Â¶</a></p>
 </li>
           <li class="normal" id="section-2.2-2.6">
-            <p id="section-2.2-2.6.1">RFC: Map keys <span class="bcp14">MUST</span> be sorted in the bytewise lexicographic order of their deterministic encoding. Duplicate keys (i.e. keys with identical determinstic bytestring values) <span class="bcp14">MUST</span> be rejected; note that semantic equivalence is not tested. As per the "Canonical CBOR" section (3.9) in [RFC7049], the following represents a properly sorted map:
+            <p id="section-2.2-2.6.1">RFC: Map keys <span class="bcp14">MUST</span> be sorted in the bytewise lexicographic order of their deterministic encoding. Duplicate keys (i.e. keys with identical determinstic bytestring values) <span class="bcp14">MUST</span> be rejected; note that semantic equivalence is not tested. As per the "Canonical CBOR" section (3.9) in <span>[<a href="#RFC7049" class="cite xref">RFC7049</a>]</span>, the following represents a properly sorted map:
 {
 "a": ... ,
 "b": ... ,
@@ -1451,9 +1452,17 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="RFC3629">[RFC3629]</dt>
+        <dd>
+<span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span class="seriesInfo">STD 63</span>, <span class="seriesInfo">RFC 3629</span>, <span class="seriesInfo">DOI 10.17487/RFC3629</span>, <time datetime="2003-11" class="refDate">November 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3629">https://www.rfc-editor.org/rfc/rfc3629</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC6920">[RFC6920]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Kutscher, D.</span>, <span class="refAuthor">Dannewitz, C.</span>, <span class="refAuthor">Ohlman, B.</span>, <span class="refAuthor">Keranen, A.</span>, and <span class="refAuthor">P. Hallam-Baker</span>, <span class="refTitle">"Naming Things with Hashes"</span>, <span class="seriesInfo">RFC 6920</span>, <span class="seriesInfo">DOI 10.17487/RFC6920</span>, <time datetime="2013-04" class="refDate">April 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6920">https://www.rfc-editor.org/rfc/rfc6920</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7049">[RFC7049]</dt>
+      <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">RFC 7049</span>, <span class="seriesInfo">DOI 10.17487/RFC7049</span>, <time datetime="2013-10" class="refDate">October 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7049">https://www.rfc-editor.org/rfc/rfc7049</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1922,8 +1931,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
       <h2 id="name-test-vectors-invalid-encodi">
 <a href="#appendix-E" class="section-number selfRef">Appendix E. </a><a href="#name-test-vectors-invalid-encodi" class="section-name selfRef">Test Vectors: Invalid Encodings</a>
       </h2>
-<p id="appendix-E-1">**TODO - Add a bunch of normal stuff from the excluded major types to this
-**<a href="#appendix-E-1" class="pilcrow">Â¶</a></p>
+<p id="appendix-E-1"><strong>TODO - Add a bunch of normal stuff from the excluded major types to this</strong><a href="#appendix-E-1" class="pilcrow">Â¶</a></p>
 <table class="center" id="table-5">
         <caption><a href="#table-5" class="selfRef">Table 5</a></caption>
 <thead>
