@@ -2,18 +2,25 @@
 
 
 
-WG Working Group                                              Y. N. Here
-Internet-Draft                                    Your Organization Here
-Intended status: Informational                             14 April 2025
-Expires: 16 October 2025
+CBOR Working Group                                          J. Caballero
+Internet-Draft                                                 R. Berjon
+Intended status: Informational                           IPFS Foundation
+Expires: 16 October 2025                                   14 April 2025
 
 
-                           TODO - Your title
-                  draft-todo-yourname-protocol-latest
+                    The tag-42 profile of CBOR Core
+                        draft-caballero-cborc42
 
 Abstract
 
-   TODO Abstract
+   This document defines a strict profile of CBOR Core (CBOR/c) intended
+   for use with the special tag 42.  Like the CBOR Core it profiles,
+   "CBOR/c-42" can also be used as an internet-scale serialization for
+   JSON, and is optimized for objects that compose into a directed
+   acyclical graph.  Since CBOR/c-42 objects link to one another by
+   hash-based identifiers, deterministic encoding is mandated.  This
+   document mainly targets CBOR tool developers and those downstream
+   users who would like to precisely configure their tools.
 
 About This Document
 
@@ -21,15 +28,14 @@ About This Document
 
    The latest revision of this draft can be found at
    https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-todo-yourname-
-   protocol/.
+   be found at https://datatracker.ietf.org/doc/draft-caballero/.
 
    Discussion of this document takes place on the WG Working Group
    mailing list (mailto:WG@example.com), which is archived at
    https://example.com/WG.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/USER/REPO.
+   https://github.com/ipfs-tech/cborc42.
 
 Status of This Memo
 
@@ -70,7 +76,7 @@ Table of Contents
    4.  IANA Considerations
    5.  Normative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -107,8 +113,13 @@ Acknowledgments
 
    TODO acknowledge.
 
-Author's Address
+Authors' Addresses
 
-   Your Name Here
-   Your Organization Here
-   Email: your.email@example.com
+   Juan Caballero
+   IPFS Foundation
+   Email: bumblefudge@learningproof.xyz
+
+
+   Robin Berjon
+   IPFS Foundation
+   Email: robin@berjon.com
