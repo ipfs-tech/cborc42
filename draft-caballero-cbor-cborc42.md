@@ -39,7 +39,9 @@ normative:
   RFC8949:
 
 informative:
+  RFC3629:
   RFC6920:
+  RFC7049:
 
 --- abstract
 
@@ -228,8 +230,7 @@ The textual representation of the values is based on the serialization method fo
 
 # Test Vectors: Invalid Encodings
 
-**TODO - Add a bunch of normal stuff from the excluded major types to this
-**
+**TODO - Add a bunch of normal stuff from the excluded major types to this**
 
 | CBOR Encoding | Diagnostic Notation | Comment Notes |
 |----|----|----|
