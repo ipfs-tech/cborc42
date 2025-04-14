@@ -19,45 +19,51 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "The tag-42 profile of CBOR Core"
+abbrev: "CBOR/c-42"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-caballero-cborc42
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
 v: 3
 area: AREA
-workgroup: WG Working Group
+workgroup: CBOR Working Group
 keyword:
- - next generation
- - unicorn
+ - CBOR
+ - CBOR/c
+ - deterministic encoding
  - sparkling distributed ledger
 venue:
   group: WG
   type: Working Group
   mail: WG@example.com
   arch: https://example.com/WG
-  github: USER/REPO
+  github: ipfs-tech/cborc42
   latest: https://example.com/LATEST
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Juan Caballero
+    organization: IPFS Foundation
+    email: bumblefudge@learningproof.xyz
+ -
+    fullname: Robin Berjon
+    organization: IPFS Foundation
+    email: robin@berjon.com
 
 normative:
 
 informative:
 
-
 --- abstract
 
-TODO Abstract
-
+This document defines a strict profile of CBOR Core (CBOR/c) intended for use with the special tag 42.
+Like the CBOR Core it profiles, "CBOR/c-42" can also be used as an internet-scale serialization for JSON, and is optimized for objects that compose into a directed acyclical graph.
+Since CBOR/c-42 objects link to one another by hash-based identifiers, deterministic encoding is mandated.
+This document mainly targets CBOR tool developers and those downstream users who would like to precisely configure their tools.
 
 --- middle
 
