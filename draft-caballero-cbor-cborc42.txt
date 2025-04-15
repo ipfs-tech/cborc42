@@ -5,7 +5,7 @@
 Concise Binary Object Representation Maintenance and ExtensionsJ. Caballero
 Internet-Draft                                                 R. Berjon
 Intended status: Informational                           IPFS Foundation
-Expires: 16 October 2025                                   14 April 2025
+Expires: 17 October 2025                                   15 April 2025
 
 
                     The tag-42 profile of CBOR Core
@@ -18,9 +18,14 @@ Abstract
    "CBOR/c-42" can also be used as an internet-scale serialization for
    JSON, and is optimized for objects that compose into a directed
    acyclical graph.  Since CBOR/c-42 objects link to one another by
-   hash-based identifiers, deterministic encoding is mandated.  This
-   document mainly targets CBOR tool developers and those downstream
-   users who would like to precisely configure their tools.
+   hash-based identifiers, deterministic encoding is mandated.
+
+   This document mainly targets CBOR tool developers and those
+   downstream users who would like to precisely configure their tools.
+   While full support in CBOR tools would be ideal and is already
+   possible in some highly configurable parsing libraries, ALDRs can
+   help close the delta by sidestepping the biggest interoperability
+   stumbling blocks; see Appendix F for details.
 
 About This Document
 
@@ -55,7 +60,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 October 2025.
+   This Internet-Draft will expire on 17 October 2025.
 
 Copyright Notice
 
@@ -91,6 +96,7 @@ Table of Contents
    Appendix C.  Test Vectors: Floating Point Numbers
    Appendix D.  Test Vectors: Miscellaneous Items
    Appendix E.  Test Vectors: Invalid Encodings
+   Appendix F.  Configuration and ALDRs
    Acknowledgments
    Authors' Addresses
 
@@ -377,8 +383,6 @@ Appendix B.  Test Vectors: Integers
 
 Appendix C.  Test Vectors: Floating Point Numbers
 
-   *TODO - Update this entire chart!*
-
    The textual representation of the values is based on the
    serialization method for the Number data type, defined by
    [ECMASCRIPT] with one change: to comply with diagnostic notation
@@ -387,157 +391,164 @@ Appendix C.  Test Vectors: Floating Point Numbers
    because it is supposed to generate the shortest and most correct
    representation of [IEEE754] numbers.
 
-   +===========================+====================+=================+
-   | Diagnostic Notation       | CBOR Encoding      | Comment         |
-   +===========================+====================+=================+
-   | 0.0                       | f90000             | Zero            |
-   +---------------------------+--------------------+-----------------+
-   | -0.0                      | f98000             | Negative zero   |
-   +---------------------------+--------------------+-----------------+
-   | Infinity                  | f97c00             | Infinity        |
-   +---------------------------+--------------------+-----------------+
-   | -Infinity                 | f9fc00             | Negative        |
-   |                           |                    | infinity        |
-   +---------------------------+--------------------+-----------------+
-   | NaN                       | f97e00             | Not a number    |
-   +---------------------------+--------------------+-----------------+
-   | 5.960464477539063e-8      | f90001             | Smallest        |
-   |                           |                    | positive        |
-   |                           |                    | subnormal       |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | 0.00006097555160522461    | f903ff             | Largest         |
-   |                           |                    | positive        |
-   |                           |                    | subnormal       |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | 0.00006103515625          | f90400             | Smallest        |
-   |                           |                    | positive        |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | 65504.0                   | f97bff             | Largest         |
-   |                           |                    | positive        |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | 1.401298464324817e-45     | fa00000001         | Smallest        |
-   |                           |                    | positive        |
-   |                           |                    | subnormal       |
-   |                           |                    | float32         |
-   +---------------------------+--------------------+-----------------+
-   | 1.1754942106924411e-38    | fa007fffff         | Largest         |
-   |                           |                    | positive        |
-   |                           |                    | subnormal       |
-   |                           |                    | float32         |
-   +---------------------------+--------------------+-----------------+
-   | 1.1754943508222875e-38    | fa00800000         | Smallest        |
-   |                           |                    | positive        |
-   |                           |                    | float32         |
-   +---------------------------+--------------------+-----------------+
-   | 3.4028234663852886e+38    | fa7f7fffff         | Largest         |
-   |                           |                    | positive        |
-   |                           |                    | float32         |
-   +---------------------------+--------------------+-----------------+
-   | 5.0e-324                  | fb0000000000000001 | Smallest        |
-   |                           |                    | positive        |
-   |                           |                    | subnormal       |
-   |                           |                    | float64         |
-   +---------------------------+--------------------+-----------------+
-   | 2.225073858507201e-308    | fb000fffffffffffff | Largest         |
-   |                           |                    | positive        |
-   |                           |                    | subnormal       |
-   |                           |                    | float64         |
-   +---------------------------+--------------------+-----------------+
-   | 2.2250738585072014e-308   | fb0010000000000000 | Smallest        |
-   |                           |                    | positive        |
-   |                           |                    | float64         |
-   +---------------------------+--------------------+-----------------+
-   | 1.7976931348623157e+308   | fb7fefffffffffffff | Largest         |
-   |                           |                    | positive        |
-   |                           |                    | float64         |
-   +---------------------------+--------------------+-----------------+
-   | -0.0000033333333333333333 | fbbecbf647612f3696 | Randomly        |
-   |                           |                    | selected number |
-   +---------------------------+--------------------+-----------------+
-   | 10.559998512268066        | fa4128f5c1         | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 10.559998512268068        | fb40251eb820000001 | Next in         |
-   |                           |                    | succession      |
-   +---------------------------+--------------------+-----------------+
-   | 295147905179352830000.0   | fa61800000         | 268 (diagnostic |
-   |                           |                    | notation        |
-   |                           |                    | truncates       |
-   |                           |                    | precision)      |
-   +---------------------------+--------------------+-----------------+
-   | 2.0                       | f94000             | Number without  |
-   |                           |                    | a fractional    |
-   |                           |                    | part            |
-   +---------------------------+--------------------+-----------------+
-   | -5.960464477539063e-8     | f98001             | Smallest        |
-   |                           |                    | negative        |
-   |                           |                    | subnormal       |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | -5.960464477539062e-8     | fbbe6fffffffffffff | Adjacent        |
-   |                           |                    | smallest        |
-   |                           |                    | negative        |
-   |                           |                    | subnormal       |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | -5.960464477539064e-8     | fbbe70000000000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | -5.960465188081798e-8     | fab3800001         | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 0.0000609755516052246     | fb3f0ff7ffffffffff | Adjacent        |
-   |                           |                    | largest         |
-   |                           |                    | subnormal       |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | 0.000060975551605224616   | fb3f0ff80000000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 0.000060975555243203416   | fa387fc001         | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 0.00006103515624999999    | fb3f0fffffffffffff | Adjacent        |
-   |                           |                    | smallest        |
-   |                           |                    | float16         |
-   +---------------------------+--------------------+-----------------+
-   | 0.00006103515625000001    | fb3f10000000000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 0.00006103516352595761    | fa38800001         | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 65503.99999999999         | fb40effbffffffffff | Adjacent        |
-   |                           |                    | largest float16 |
-   +---------------------------+--------------------+-----------------+
-   | 65504.00000000001         | fb40effc0000000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 65504.00390625            | fa477fe001         | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 1.4012984643248169e-45    | fb369fffffffffffff | Adjacent        |
-   |                           |                    | smallest        |
-   |                           |                    | subnormal       |
-   |                           |                    | float32         |
-   +---------------------------+--------------------+-----------------+
-   | 1.4012984643248174e-45    | fb36a0000000000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 1.175494210692441e-38     | fb380fffffbfffffff | Adjacent        |
-   |                           |                    | largest         |
-   |                           |                    | subnormal       |
-   |                           |                    | float32         |
-   +---------------------------+--------------------+-----------------+
-   | 1.1754942106924412e-38    | fb380fffffc0000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 1.1754943508222874e-38    | fb380fffffffffffff | Adjacent        |
-   |                           |                    | smallest        |
-   |                           |                    | float32         |
-   +---------------------------+--------------------+-----------------+
-   | 1.1754943508222878e-38    | fb3810000000000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
-   | 3.4028234663852882e+38    | fb47efffffdfffffff | Adjacent        |
-   |                           |                    | largest float32 |
-   +---------------------------+--------------------+-----------------+
-   | 3.402823466385289e+38     | fb47efffffe0000001 | -"-             |
-   +---------------------------+--------------------+-----------------+
+   +=========================+==================+==================+===========+
+   |Diagnostic Notation      |CBOR/c-42 Encoding|CBOR/c Encoding   |Comment    |
+   +=========================+==================+==================+===========+
+   |0.0                      |?                 |f90000            |Zero       |
+   +-------------------------+------------------+------------------+-----------+
+   |-0.0                     |?                 |f98000            |Negative   |
+   |                         |                  |                  |zero       |
+   +-------------------------+------------------+------------------+-----------+
+   |Infinity                 |invalid           |f97c00            |Infinity   |
+   +-------------------------+------------------+------------------+-----------+
+   |-Infinity                |invalid           |f9fc00            |Negative   |
+   |                         |                  |                  |infinity   |
+   +-------------------------+------------------+------------------+-----------+
+   |NaN                      |invalid           |f97e00            |Not a      |
+   |                         |                  |                  |number     |
+   +-------------------------+------------------+------------------+-----------+
+   |5.960464477539063e-8     |fb3e70000000000000|f90001            |Smallest   |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |0.00006097555160522461   |fb3f0ff80000000000|f903ff            |Largest    |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |0.00006103515625         |fb                |f90400            |Smallest   |
+   |                         |3f10000000000000  |                  |positive   |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |65504.0                  |fb                |f97bff            |Largest    |
+   |                         |40effc0000000000  |                  |positive   |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |1.401298464324817e-45    |fb36a0000000000000|fa00000001        |Smallest   |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |1.1754942106924411e-38   |fb380fffffc0000000|fa007fffff        |Largest    |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |1.1754943508222875e-38   |fb3810000000000000|fa00800000        |Smallest   |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |3.4028234663852886e+38   |fb                |fa7f7fffff        |Largest    |
+   |                         |47efffffe0000000  |                  |positive   |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |5.0e-324                 |fb0000000000000001|fb0000000000000001|Smallest   |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float64    |
+   +-------------------------+------------------+------------------+-----------+
+   |2.225073858507201e-308   |fb000fffffffffffff|fb000fffffffffffff|Largest    |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float64    |
+   +-------------------------+------------------+------------------+-----------+
+   |2.2250738585072014e-308  |fb0010000000000000|fb0010000000000000|Smallest   |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |float64    |
+   +-------------------------+------------------+------------------+-----------+
+   |1.7976931348623157e+308  |fb7fefffffffffffff|fb7fefffffffffffff|Largest    |
+   |                         |                  |                  |positive   |
+   |                         |                  |                  |float64    |
+   +-------------------------+------------------+------------------+-----------+
+   |-0.0000033333333333333333|fbbecbf647612f3696|fbbecbf647612f3696|Randomly   |
+   |                         |                  |                  |selected   |
+   |                         |                  |                  |number     |
+   +-------------------------+------------------+------------------+-----------+
+   |10.559998512268066       |fb40251eb820000000|fa4128f5c1        |-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |10.559998512268068       |fb40251eb820000001|fb40251eb820000001|Next in    |
+   |                         |                  |                  |succession |
+   +-------------------------+------------------+------------------+-----------+
+   |295147905179352830000.0  |fb                |fa61800000        |268        |
+   |                         |4430000000000000  |                  |(diagnostic|
+   |                         |                  |                  |notation   |
+   |                         |                  |                  |truncates  |
+   |                         |                  |                  |precision) |
+   +-------------------------+------------------+------------------+-----------+
+   |2.0                      |fb4000000000000000|f94000            |Number     |
+   |                         |                  |                  |without a  |
+   |                         |                  |                  |fractional |
+   |                         |                  |                  |part       |
+   +-------------------------+------------------+------------------+-----------+
+   |-5.960464477539063e-8    |fbbe70000000000000|f98001            |Smallest   |
+   |                         |                  |                  |negative   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |-5.960464477539062e-8    |fbbe6fffffffffffff|fbbe6fffffffffffff|Adjacent   |
+   |                         |                  |                  |smallest   |
+   |                         |                  |                  |negative   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |-5.960464477539064e-8    |fbbe70000000000001|fbbe70000000000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |-5.960465188081798e-8    |fbbe70000020000000|fab3800001        |-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |0.0000609755516052246    |fb3f0ff7ffffffffff|fb3f0ff7ffffffffff|Adjacent   |
+   |                         |                  |                  |largest    |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |0.000060975551605224616  |fb3f0ff80000000001|fb3f0ff80000000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |0.000060975555243203416  |fb3f0ff8002000000 |fa387fc001        |-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |0.00006103515624999999   |fb3f0fffffffffffff|fb3f0fffffffffffff|Adjacent   |
+   |                         |                  |                  |smallest   |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |0.00006103515625000001   |fb3f10000000000001|fb3f10000000000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |0.00006103516352595761   |fb3f10000020000000|fa38800001        |-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |65503.99999999999        |fb40effbffffffffff|fb40effbffffffffff|Adjacent   |
+   |                         |                  |                  |largest    |
+   |                         |                  |                  |float16    |
+   +-------------------------+------------------+------------------+-----------+
+   |65504.00000000001        |fb40effc0000000001|fb40effc0000000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |65504.00390625           |fb40effc0020000000|fa477fe001        |-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |1.4012984643248169e-45   |fb369fffffffffffff|fb369fffffffffffff|Adjacent   |
+   |                         |                  |                  |smallest   |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |1.4012984643248174e-45   |fb36a0000000000001|fb36a0000000000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |1.175494210692441e-38    |fb380fffffbfffffff|fb380fffffbfffffff|Adjacent   |
+   |                         |                  |                  |largest    |
+   |                         |                  |                  |subnormal  |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |1.1754942106924412e-38   |fb380fffffc0000001|fb380fffffc0000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |1.1754943508222874e-38   |fb380fffffffffffff|fb380fffffffffffff|Adjacent   |
+   |                         |                  |                  |smallest   |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |1.1754943508222878e-38   |fb3810000000000001|fb3810000000000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
+   |3.4028234663852882e+38   |fb47efffffdfffffff|fb47efffffdfffffff|Adjacent   |
+   |                         |                  |                  |largest    |
+   |                         |                  |                  |float32    |
+   +-------------------------+------------------+------------------+-----------+
+   |3.402823466385289e+38    |fb47efffffe0000001|fb47efffffe0000001|-"-        |
+   +-------------------------+------------------+------------------+-----------+
 
-                                 Table 3
+                                  Table 3
 
 Appendix D.  Test Vectors: Miscellaneous Items
 
@@ -627,6 +638,28 @@ Appendix E.  Test Vectors: Invalid Encodings
     +--------------------------+---------------------+----------------+
 
                                   Table 5
+
+Appendix F.  Configuration and ALDRs
+
+   Someone familiar with the long history of deterministic or canonical
+   CBOR will note that the above specification mixes and matches
+   properties from that history of profiling.  The two biggest issues,
+   other than the drastically reduced set of types and tags, are the
+   treatment of floats and the sort order for maps, which many CBOR
+   libraries refer to as "legacy sort" or "[RFC7049] canonical sort".
+
+   1.  Configuring a generic library to _encode_ CBOR according to this
+       library, when that library does not support this legacy sort
+       mode, can be a substantial burden, and may require implementing
+       that sorting at the application layer.
+
+   2.  Issues around float reduction are harder to triage at the
+       application layer, although many ALDRs and applications of this
+       encoding (such as that of the BlueSky social network and the data
+       model of its underlying "Authenticated Data Protocol") completely
+       sidestep the issue by simply disallowing floats at the CBOR
+       level, or transcoding floats to a "virtual type" at the
+       application layer, e.g. by retyping floats as strings.
 
 Acknowledgments
 
