@@ -1,0 +1,135 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2025-04-15T01:16:12.936199+00:00",
+  "repo": "ipfs-tech/cborc42",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOOZP3QM6yZEWm",
+      "title": "Deprecated/read-only strictness or full ban for types that break IPLD interop?",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/1",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Comparing CBOR/c and CDE to DAG-CBOR, i notice there are some major types and simple types excluded only in the latter, which the DAG-CBOR spec refers to as explicitly incompatible with IPLD data model:\n- simple NaN (signaling/value-containing NaN already excluded from CBOR/c and CDE anyways)\n- Infinity and -Infinity (and variants from the float types)\n- Undefined (minor 23)\n\nI can see how these should continue to be deprecated for **encoding**, but is there any argument for acceptd them when **decoding**? i.e. should a decode error on the presence of these values (malformed object) or have some other defined behavior? I assume erroring is fine here, but opening an issue incase there are corner-cases.",
+      "createdAt": "2025-04-14T12:25:37Z",
+      "updatedAt": "2025-04-14T12:25:37Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOOZP3QM6yZJuP",
+      "title": "Single object top-level rule: still needed?",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/2",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Original [DAG-CBOR spec](https://ipld.io/specs/codecs/dag-cbor/spec/): \n\n> Encode and decode must operate on a single top-level CBOR object. Back-to-back concatenated objects are not allowed or supported, as suggested by [section 5.1 of RFC 8949](https://tools.ietf.org/html/rfc8949#section-5.1) for streaming applications. All bytes of an encoded DAG-CBOR object must decode to a single object. Extraneous bytes included in an IPLD block, whether valid or invalid CBOR, must not be accepted as valid DAG-CBOR.\n\nI remember seeing an issue about ATProto's usage of DAG-CBOR breaking this rule, and am wondering if there is some \"decode-only\" style tolerance that could happen here, or if this is an issue i've misunderstood from the jump.",
+      "createdAt": "2025-04-14T12:34:31Z",
+      "updatedAt": "2025-04-14T12:34:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOOZP3QM6yZTcH",
+      "title": "Tag42 typing minutae: is it an integer, or a bytestring that is as many bytes long as an 8-bit INT?",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/3",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The DAG-CBOR spec mentions, on the subject of tag 42 CID links, that they are always prefixed `0xd82a`, \"where 0xd8 is \"major type 6 with **8-bit integer** to follow\" and 0x2a is the number 42\". The [CID spec](https://github.com/multiformats/cid?tab=readme-ov-file#how-does-it-work) describes CIDs in their underlining binary format as a bytestring, not as an integer, so I am wondering if tag42 values should be treated as bytestrings of 8-bit-integer length or as integers with leading zeros (which would, of course, break the encoding rules if prefixed as integers!)",
+      "createdAt": "2025-04-14T12:49:49Z",
+      "updatedAt": "2025-04-14T12:49:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOOZP3QM6yZbeY",
+      "title": "Add any nuance to float reduction and round-tripping?",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/4",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Note that ATProto just has a flat \"no floats\" policy, to simplify! We could discourage floats but still allow them to be valid on encode/decode, or ban on encode but expect parsers not to barf on...",
+      "createdAt": "2025-04-14T13:01:47Z",
+      "updatedAt": "2025-04-14T13:01:47Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOOZP3QM6yZdGm",
+      "title": "Move some requirements or suggestions to an ALDR appendix?",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/5",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Such things as \"no floats\" or \"DASL-only CIDs\" could be moved to an ALDR appendix? That is perhaps the best place to move things if we want 100% of CBOR wisdom to reside in a single document, but it turns out that at the CDE/CBOR/c level it doesn't make sense to include such recommendations. Downside: readers outside the CBOR WG might be baffled or skip it assuming it wouldn't be in an appendix if it was important.",
+      "createdAt": "2025-04-14T13:04:17Z",
+      "updatedAt": "2025-04-14T13:04:17Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": []
+}
