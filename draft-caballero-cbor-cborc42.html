@@ -1222,6 +1222,11 @@ While full support in CBOR tools would be ideal and is already possible in some 
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-binary-content-identifiers" class="internal xref">Binary Content Identifiers</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-legacy-support" class="internal xref">Legacy Support</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-test-vectors" class="internal xref">Test Vectors</a></p>
@@ -1263,7 +1268,7 @@ While full support in CBOR tools would be ideal and is already possible in some 
       </h2>
 <p id="section-1-1">The IPFS ecosystem has long made structural usage of its own home-grown CBOR profile, dating from the early days of the CBOR working group and fine-tuned over the years in community/internal venues.
 Configuring CBOR tooling in various languages to decode this data and encode new data conformantly has been a challenge, and a unified specification (updated to modern terminology, as the CBOR working group has iterated and evolved so much in the intervening years) is set out in this document.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Note: unlike the CBOR/c specification, no opinion on signing mechanics is expressed here, and will be addressed in separate documents, if at all.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">Note: unlike the CBOR/c specification, no opinion on best practices for hashing or signing mechanisms is expressed here, and will be addressed in separate documents, if at all.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="design-goals">
 <section id="section-1.1">
         <h3 id="name-design-goals">
@@ -1339,7 +1344,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">float</td>
-              <td class="text-left" rowspan="1" colspan="1">64-bit [IEEE754] numbers ONLY</td>
+              <td class="text-left" rowspan="1" colspan="1">64-bit <span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span> numbers ONLY</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">tstr</td>
@@ -1393,7 +1398,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             </ul>
 </li>
           <li class="normal" id="section-2.2-2.3">
-            <p id="section-2.2-2.3.1">RFC+: UNLIKE CBOR/c and standard CDE encoding, floating-point numbers <span class="bcp14">MUST</span> always be encoded using the longest [IEEE754] variant. Appendix B.2 features a list of floating-point sample values and their expected encoding.<a href="#section-2.2-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-2.2-2.3.1">RFC+: UNLIKE CBOR/c and standard CDE encoding, floating-point numbers <span class="bcp14">MUST</span> always be encoded using the longest <span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span> variant. Appendix B.2 features a list of floating-point sample values and their expected encoding.<a href="#section-2.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.2-2.4">
             <p id="section-2.2-2.4.1">RFC+: NaN values with payloads (like f97e01), or having the most significant bit set ("signaling"), <span class="bcp14">MUST</span> be rejected. See also Appendix B.4 for invalid NaN variants.<a href="#section-2.2-2.4.1" class="pilcrow">¶</a></p>
@@ -1787,6 +1792,10 @@ As such, these should be considered as an understudied security surface for the 
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="IEEE754">[IEEE754]</dt>
+        <dd>
+<span class="refTitle">"IEEE Standard for Floating-Point Arithmetic"</span>, <span class="refContent">IEEE</span>, <span class="seriesInfo">DOI 10.1109/ieeestd.2019.8766229</span>, <span class="seriesInfo">ISBN ["9781504459242"]</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://doi.org/10.1109/ieeestd.2019.8766229">https://doi.org/10.1109/ieeestd.2019.8766229</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
@@ -1820,13 +1829,33 @@ As such, these should be considered as an understudied security surface for the 
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="DASL.ING">[DASL.ING]</dt>
+        <dd>
+<span class="refAuthor">Berjon, R.</span> and <span class="refAuthor">J. Caballero</span>, <span class="refTitle">"DASL Content Identifiers"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://dasl.ing/cid.html">https://dasl.ing/cid.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ECMASCRIPT">[ECMASCRIPT]</dt>
+        <dd>
+<span class="refTitle">"ECMAScript® 2024 Language Specification"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.ecma-international.org/publications/standards/Ecma-262.htm">https://www.ecma-international.org/publications/standards/Ecma-262.htm</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="MULTIFORMATS">[MULTIFORMATS]</dt>
+        <dd>
+<span class="refTitle">"Multiformats Community Registry"</span>, <span>n.d.</span>, <span>&lt;<a href="https://github.com/multiformats/multicodec/">https://github.com/multiformats/multicodec/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="PLAYGROUND">[PLAYGROUND]</dt>
         <dd>
 <span class="refTitle">"Online CBOR testing tool"</span>, <span>n.d.</span>, <span>&lt;<a href="https://cyberphone.github.io/CBOR.js/doc/playground.html">https://cyberphone.github.io/CBOR.js/doc/playground.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="protobuf">[protobuf]</dt>
+        <dd>
+<span class="refTitle">"Encoding rules and MIME type for Protocol Buffers"</span>, <time datetime="2012" class="refDate">2012</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-rfernando-protocol-buffers-00.txt">https://www.ietf.org/archive/id/draft-rfernando-protocol-buffers-00.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC3629">[RFC3629]</dt>
         <dd>
 <span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span class="seriesInfo">STD 63</span>, <span class="seriesInfo">RFC 3629</span>, <span class="seriesInfo">DOI 10.17487/RFC3629</span>, <time datetime="2003-11" class="refDate">November 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3629">https://www.rfc-editor.org/rfc/rfc3629</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6256">[RFC6256]</dt>
+        <dd>
+<span class="refAuthor">Eddy, W.</span> and <span class="refAuthor">E. Davies</span>, <span class="refTitle">"Using Self-Delimiting Numeric Values in Protocols"</span>, <span class="seriesInfo">RFC 6256</span>, <span class="seriesInfo">DOI 10.17487/RFC6256</span>, <time datetime="2011-05" class="refDate">May 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6256">https://www.rfc-editor.org/rfc/rfc6256</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6920">[RFC6920]</dt>
       <dd>
@@ -1842,7 +1871,62 @@ As such, these should be considered as an understudied security surface for the 
       <h2 id="name-binary-content-identifiers">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-binary-content-identifiers" class="section-name selfRef">Binary Content Identifiers</a>
       </h2>
-<p id="appendix-A-1"><strong>TODO - copy spec out from</strong> <a href="https://github.com/multiformats/cid?tab=readme-ov-file#how-does-it-work">multiformats/cid</a> simplifying a bit in the process.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">A simple hash-based "content identifier" is used to link documents in the graph for which CBOR/c-42 was designed, and tag 42 was registered specifically for those link identifiers.
+Being able to navigate or generate new links in this graph are strictly unrelated concerns and of course optional for a CBOR/c-42 encoder and decoder, so this entire section is non-normative and provided informationally for the purposes of making less opaque the bytestrings marked by tag 42.
+Some CBOR/c-42 parsers may want to introspect the tag 42 values, if only to know which dereference to other CBOR/c-42 (or vanilla CBOR) documents.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Note: this describes tag-42 values from the perspective of the CBOR documents in which they are embedded; a simpler, "application developer"-oriented overview of content identifiers can be found at <span>[<a href="#DASL.ING" class="cite xref">DASL.ING</a>]</span>.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<p id="appendix-A-3">The format consists of a few sigils prepended to a hash of the linked document; there are many possible values for these sigils but these are like CBOR tags, extension points rather than required features of the system.
+All the sigils and the hash are of variable length, encoded as Self-Delimiting Numeric Values (<span>[<a href="#RFC6256" class="cite xref">RFC6256</a>]</span>).
+The sequence of segments is as follows:<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A-4">
+<li id="appendix-A-4.1">
+          <p id="appendix-A-4.1.1">Mandatory padding byte <code>0x00</code>. This is required for interoperability with non-CBOR CID systems and for historical reasons (see Legacy Support section below).<a href="#appendix-A-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-A-4.2">
+          <p id="appendix-A-4.2.1">Version byte: <code>0x01</code> is the only value worth attempting to parse in a general-purpose tool.  <code>0x00</code> refers to a legacy form explained below, with <code>0x02</code> and <code>0x03</code> reserved for potential future use.<a href="#appendix-A-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-A-4.3">
+          <p id="appendix-A-4.3.1">A contextualizing sigil roughly mapping to content types, with the canonical registry governed by a community registry called <span>[<a href="#MULTIFORMATS" class="cite xref">MULTIFORMATS</a>]</span>. The only values that all CBOR/c-42 decoders need to recognize are:<a href="#appendix-A-4.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A-4.3.2">
+<li id="appendix-A-4.3.2.1">
+              <p id="appendix-A-4.3.2.1.1"><code>0x71</code> - CBOR/c-42<a href="#appendix-A-4.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="appendix-A-4.3.2.2">
+              <p id="appendix-A-4.3.2.2.1"><code>0x51</code> - Any other form of CBOR<a href="#appendix-A-4.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="appendix-A-4.3.2.3">
+              <p id="appendix-A-4.3.2.3.1"><code>0x55</code> - Raw, unstructured binary<a href="#appendix-A-4.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+</li>
+        <li id="appendix-A-4.4">
+          <p id="appendix-A-4.4.1">A hash-function sigil, drawn from the same registry. Likewise, the vast majority of values here are optional extensions; the required hash functions to be aware of are:<a href="#appendix-A-4.4.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A-4.4.2">
+<li id="appendix-A-4.4.2.1">
+              <p id="appendix-A-4.4.2.1.1"><code>0x12</code> - SHA-256<a href="#appendix-A-4.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ol>
+</li>
+        <li id="appendix-A-4.5">
+          <p id="appendix-A-4.5.1">A hash-length (as SDNV).<a href="#appendix-A-4.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-A-4.6">
+          <p id="appendix-A-4.6.1">The hash (all remaining bytes).<a href="#appendix-A-4.6.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<div id="legacy-support">
+<section id="appendix-A.1">
+        <h3 id="name-legacy-support">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-legacy-support" class="section-name selfRef">Legacy Support</a>
+        </h3>
+<p id="appendix-A.1-1">Any tag 42 value that does NOT begin with <code>0x00</code> can be considered malformed, and any attempt to recuperate legacy links or variations from such a value is entirely optional.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-2">The most common variant of content identifiers is the historical v0 variety, which were always 34 bytes long and consisted only of segments 4 (<code>0x12</code>), 5 (<code>0x20</code>, i.e. 32 bytes) and 6 above (a 32-byte SHA256 hash).
+Prepending <code>0x00</code> (padding byte), <code>0x01</code> (CID version), <code>0x70</code> (DAG-profiled protobuf) turns these into valid "v1" content identifiers, although they still dereference to protobuffer objects rather than CBOR objects.
+For guidance on protobuf deserialization, see protobuf.dev or the relevant <span>[<a href="#protobuf" class="cite xref">protobuf</a>]</span> draft RFC.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-3">Likewise, some specialized applications that can strictly assume segments 1-3 or 1-5 will be invariant systemwide have been observed to use "truncated" content identifiers, prepending the invariant prefixes only in transformations at point of egress for interoperability purposes.
+This is not best practice but can also serve as some explanation for the padding byte.<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="test-vectors">
@@ -1984,7 +2068,7 @@ As such, these should be considered as an understudied security surface for the 
         <h3 id="name-floating-point-numbers">
 <a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-floating-point-numbers" class="section-name selfRef">Floating Point Numbers</a>
         </h3>
-<p id="appendix-B.2-1">The textual representation of the values is based on the serialization method for the Number data type, defined by [ECMASCRIPT] with one change: to comply with diagnostic notation (section 8 of <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>), all values are expressed as floating-point numbers. The rationale for using [ECMASCRIPT] serialization is because it is supposed to generate the shortest and most correct representation of [IEEE754] numbers.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.2-1">The textual representation of the values is based on the serialization method for the Number data type, defined by <span>[<a href="#ECMASCRIPT" class="cite xref">ECMASCRIPT</a>]</span> with one change: to comply with diagnostic notation (section 8 of <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>), all values are expressed as floating-point numbers. The rationale for using <span>[<a href="#ECMASCRIPT" class="cite xref">ECMASCRIPT</a>]</span> serialization is because it is supposed to generate the shortest and most correct representation of <span>[<a href="#IEEE754" class="cite xref">IEEE754</a>]</span> numbers.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-5">
           <caption><a href="#table-5" class="selfRef">Table 5</a></caption>
 <thead>
@@ -2276,17 +2360,27 @@ As such, these should be considered as an understudied security surface for the 
             <tr>
               <td class="text-left" rowspan="1" colspan="1">true</td>
               <td class="text-left" rowspan="1" colspan="1">f5</td>
-              <td class="text-left" rowspan="1" colspan="1">Boolean true</td>
+              <td class="text-left" rowspan="1" colspan="1">Boolean true (allowed simple value)</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">null</td>
               <td class="text-left" rowspan="1" colspan="1">f6</td>
-              <td class="text-left" rowspan="1" colspan="1">Null</td>
+              <td class="text-left" rowspan="1" colspan="1">Null (allowed simple value)</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">simple(59)</td>
               <td class="text-left" rowspan="1" colspan="1">f83b</td>
-              <td class="text-left" rowspan="1" colspan="1">Simple value</td>
+              <td class="text-left" rowspan="1" colspan="1">Disallowed simple value</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">59</td>
+              <td class="text-left" rowspan="1" colspan="1">183b</td>
+              <td class="text-left" rowspan="1" colspan="1">unsigned integer</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">-59</td>
+              <td class="text-left" rowspan="1" colspan="1">383a</td>
+              <td class="text-left" rowspan="1" colspan="1">signed integer</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0("2025-03-30T12:24:16Z")</td>
@@ -2295,7 +2389,7 @@ As such, these should be considered as an understudied security surface for the 
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">305431323a32343a31365a</td>
-              <td class="text-left" rowspan="1" colspan="1">ISO date/time</td>
+              <td class="text-left" rowspan="1" colspan="1">Disallowed ISO date/time</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
@@ -2304,27 +2398,7 @@ As such, these should be considered as an understudied security surface for the 
               <td class="text-left" rowspan="1" colspan="1">Array combinations</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">{</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">"a": 0,</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">"b": 1,</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">"aa": 2</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">}</td>
+              <td class="text-left" rowspan="1" colspan="1">{ "a": 0, "b": 1, "aa": 2}</td>
               <td class="text-left" rowspan="1" colspan="1">a361610161620262616103</td>
               <td class="text-left" rowspan="1" colspan="1">Map object</td>
             </tr>
@@ -2347,7 +2421,6 @@ As such, these should be considered as an understudied security surface for the 
         <h3 id="name-invalid-encodings">
 <a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-invalid-encodings" class="section-name selfRef">Invalid Encodings</a>
         </h3>
-<p id="appendix-B.4-1"><strong>TODO - Add a bunch of normal stuff from the excluded major types to this</strong><a href="#appendix-B.4-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-7">
           <caption><a href="#table-7" class="selfRef">Table 7</a></caption>
 <thead>
@@ -2384,21 +2457,27 @@ As such, these should be considered as an understudied security surface for the 
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">fa7fc00000</td>
-              <td class="text-left" rowspan="1" colspan="1">NaN</td>
-              <td class="text-left" rowspan="1" colspan="1">Not in shortest encoding</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
               <td class="text-left" rowspan="1" colspan="1">c243010000</td>
               <td class="text-left" rowspan="1" colspan="1">65536</td>
               <td class="text-left" rowspan="1" colspan="1">Incorrect value for bigint</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">fa7fc00000</td>
+              <td class="text-left" rowspan="1" colspan="1">NaN</td>
+              <td class="text-left" rowspan="1" colspan="1">Not in shortest encoding</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
               <td class="text-left" rowspan="1" colspan="1">f97e01</td>
               <td class="text-left" rowspan="1" colspan="1">NaN</td>
               <td class="text-left" rowspan="1" colspan="1">NaN with payload</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">f97e00</td>
+              <td class="text-left" rowspan="1" colspan="1">NaN</td>
+              <td class="text-left" rowspan="1" colspan="1">NaN disallowed even in shortest encoding</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
