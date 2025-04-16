@@ -39,13 +39,34 @@ normative:
   RFC8949:
   RFC8742:
   RFC7049:
+  IEEE754: DOI.10.1109/IEEESTD.2019.8766229
 
 informative:
   RFC3629:
+  RFC6256:
   RFC6920:
+  MULTIFORMATS:
+    title: Multiformats Community Registry
+    target: https://github.com/multiformats/multicodec/
+  DASL.ING:
+    author:
+      -
+        name: Robin Berjon
+      -
+        name: Juan Caballero
+    date: 2024
+    title: DASL Content Identifiers
+    target: https://dasl.ing/cid.html
   PLAYGROUND:
     title: Online CBOR testing tool
     target: https://cyberphone.github.io/CBOR.js/doc/playground.html
+  protobuf:
+    title: Encoding rules and MIME type for Protocol Buffers
+    date: 2012
+    target: https://www.ietf.org/archive/id/draft-rfernando-protocol-buffers-00.txt
+  ECMASCRIPT:
+    title: ECMAScript® 2024 Language Specification
+    target: https://www.ecma-international.org/publications/standards/Ecma-262.htm
 
 --- abstract
 
@@ -63,7 +84,7 @@ While full support in CBOR tools would be ideal and is already possible in some 
 The IPFS ecosystem has long made structural usage of its own home-grown CBOR profile, dating from the early days of the CBOR working group and fine-tuned over the years in community/internal venues.
 Configuring CBOR tooling in various languages to decode this data and encode new data conformantly has been a challenge, and a unified specification (updated to modern terminology, as the CBOR working group has iterated and evolved so much in the intervening years) is set out in this document.
 
-Note: unlike the CBOR/c specification, no opinion on signing mechanics is expressed here, and will be addressed in separate documents, if at all.
+Note: unlike the CBOR/c specification, no opinion on best practices for hashing or signing mechanisms is expressed here, and will be addressed in separate documents, if at all.
 
 ## Design Goals
 
@@ -239,7 +260,37 @@ This document has no IANA actions.
 
 # Binary Content Identifiers
 
-**TODO - copy spec out from** [multiformats/cid](https://github.com/multiformats/cid?tab=readme-ov-file#how-does-it-work) simplifying a bit in the process.
+A simple hash-based "content identifier" is used to link documents in the graph for which CBOR/c-42 was designed, and tag 42 was registered specifically for those link identifiers.
+Being able to navigate or generate new links in this graph are strictly unrelated concerns and of course optional for a CBOR/c-42 encoder and decoder, so this entire section is non-normative and provided informationally for the purposes of making less opaque the bytestrings marked by tag 42.
+Some CBOR/c-42 parsers may want to introspect the tag 42 values, if only to know which dereference to other CBOR/c-42 (or vanilla CBOR) documents.
+
+Note: this describes tag-42 values from the perspective of the CBOR documents in which they are embedded; a simpler, "application developer"-oriented overview of content identifiers can be found at [dasl.ing].
+
+The format consists of a few sigils prepended to a hash of the linked document; there are many possible values for these sigils but these are like CBOR tags, extension points rather than required features of the system.
+All the sigils and the hash are of variable length, encoded as Self-Delimiting Numeric Values ([RFC6256]).
+The sequence of segments is as follows:
+
+1. Mandatory padding byte `0x00`. This is required for interoperability with non-CBOR CID systems and for historical reasons (see Legacy Support section below).
+2. Version byte: `0x01` is the only value worth attempting to parse in a general-purpose tool.  `0x00` refers to a legacy form explained below, with `0x02` and `0x03` reserved for potential future use.
+3. A contextualizing sigil roughly mapping to content types, with the canonical registry governed by a community registry called [MULTIFORMATS]. The only values that all CBOR/c-42 decoders need to recognize are:
+   1. `0x71` - CBOR/c-42
+   2. `0x51` - Any other form of CBOR
+   3. `0x55` - Raw, unstructured binary
+4. A hash-function sigil, drawn from the same registry. Likewise, the vast majority of values here are optional extensions; the required hash functions to be aware of are:
+   1. `0x12` - SHA-256
+5. A hash-length (as SDNV).
+6. The hash (all remaining bytes).
+
+## Legacy Support
+
+Any tag 42 value that does NOT begin with `0x00` can be considered malformed, and any attempt to recuperate legacy links or variations from such a value is entirely optional.
+
+The most common variant of content identifiers is the historical v0 variety, which were always 34 bytes long and consisted only of segments 4 (`0x12`), 5 (`0x20`, i.e. 32 bytes) and 6 above (a 32-byte SHA256 hash).
+Prepending `0x00` (padding byte), `0x01` (CID version), `0x70` (DAG-profiled protobuf) turns these into valid "v1" content identifiers, although they still dereference to protobuffer objects rather than CBOR objects.
+For guidance on protobuf deserialization, see protobuf.dev or the relevant [protobuf] draft RFC.
+
+Likewise, some specialized applications that can strictly assume segments 1-3 or 1-5 will be invariant systemwide have been observed to use "truncated" content identifiers, prepending the invariant prefixes only in transformations at point of egress for interoperability purposes.
+This is not best practice but can also serve as some explanation for the padding byte.
 
 # Test Vectors
 
@@ -324,23 +375,19 @@ The textual representation of the values is based on the serialization method fo
 
 |  Diagnostic Notation | CBOR Encoding | Comment |
 |----|----|----|
-| true | f5 | Boolean true |
-| null | f6 | Null |
-| simple(59) | f83b | Simple value |
+| true | f5 | Boolean true (allowed simple value) |
+| null | f6 | Null (allowed simple value) |
+| simple(59) | f83b | Disallowed simple value |
+| 59 | 183b | unsigned integer |
+| -59 | 383a | signed integer |
 | 0("2025-03-30T12:24:16Z") | c074323032352d30332d33 |  |
-| 305431323a32343a31365a | ISO date/time |  |
+| 305431323a32343a31365a | Disallowed ISO date/time |  |
 | \[1, \[2, 3\], \[4, 5\]\] | 8301820203820405 | Array combinations |
-| { |  |  |
-|  "a": 0, |  |  |
-|  "b": 1, |  |  |
-|  "aa": 2 |  |  |
-| } | a361610161620262616103 | Map object |
+| { "a": 0, "b": 1, "aa": 2} | a361610161620262616103 | Map object |
 | h'48656c6c6f2043424f5221' | 4b48656c6c6f2043424f5221 | Binary string |
 | "🚀 science" | 6cf09f9a8020736369656e6365 | Text string with emoji |
 
 ## Invalid Encodings
-
-**TODO - Add a bunch of normal stuff from the excluded major types to this**
 
 | CBOR Encoding | Diagnostic Notation | Comment Notes |
 |----|----|----|
@@ -348,9 +395,10 @@ The textual representation of the values is based on the serialization method fo
 | 1900ff | 255 | Number with leading zero bytes |
 | c34a00010000000000000000 | -18446744073709551617 | Number with leading zero bytes |
 | Fa41280000 | 10.5 | Not in shortest encoding |
-| fa7fc00000 | NaN | Not in shortest encoding |
 | c243010000 | 65536 | Incorrect value for bigint |
+| fa7fc00000 | NaN | Not in shortest encoding |
 | f97e01 | NaN | NaN with payload |
+| f97e00 | NaN | NaN disallowed even in shortest encoding |
 | 5f4101420203ff | (\_ h'01', h'0203') | Indefinite length object |
 | fc |  | Reserved |
 | f818 |  | Invalid simple value |
