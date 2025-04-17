@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-15T01:16:12.936199+00:00",
+  "timestamp": "2025-04-17T01:14:50.406053+00:00",
   "repo": "ipfs-tech/cborc42",
   "labels": [
     {
@@ -60,9 +60,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Comparing CBOR/c and CDE to DAG-CBOR, i notice there are some major types and simple types excluded only in the latter, which the DAG-CBOR spec refers to as explicitly incompatible with IPLD data model:\n- simple NaN (signaling/value-containing NaN already excluded from CBOR/c and CDE anyways)\n- Infinity and -Infinity (and variants from the float types)\n- Undefined (minor 23)\n\nI can see how these should continue to be deprecated for **encoding**, but is there any argument for acceptd them when **decoding**? i.e. should a decode error on the presence of these values (malformed object) or have some other defined behavior? I assume erroring is fine here, but opening an issue incase there are corner-cases.",
+      "body": "Comparing CBOR/c and CDE to DAG-CBOR, i notice there are some major types and simple types excluded only in the latter, which the DAG-CBOR spec refers to as explicitly incompatible with IPLD data model:\n- simple NaN (signaling/value-containing NaN already excluded from CBOR/c and CDE anyways)\n- Infinity and -Infinity (and variants from the float types)\n- Undefined (minor 23)\n\nI can see how these should continue to be deprecated for **encoding**, but is there any argument for accepting them when **decoding**? i.e. should a decode error on the presence of these values (malformed object) or have some other defined behavior, like a non-breaking warning? I assume erroring is fine here, but opening an issue incase there are corner-cases at the tooling level.",
       "createdAt": "2025-04-14T12:25:37Z",
-      "updatedAt": "2025-04-14T12:25:37Z",
+      "updatedAt": "2025-04-16T10:20:09Z",
       "closedAt": null,
       "comments": []
     },
@@ -78,55 +78,135 @@
       "labels": [],
       "body": "Original [DAG-CBOR spec](https://ipld.io/specs/codecs/dag-cbor/spec/): \n\n> Encode and decode must operate on a single top-level CBOR object. Back-to-back concatenated objects are not allowed or supported, as suggested by [section 5.1 of RFC 8949](https://tools.ietf.org/html/rfc8949#section-5.1) for streaming applications. All bytes of an encoded DAG-CBOR object must decode to a single object. Extraneous bytes included in an IPLD block, whether valid or invalid CBOR, must not be accepted as valid DAG-CBOR.\n\nI remember seeing an issue about ATProto's usage of DAG-CBOR breaking this rule, and am wondering if there is some \"decode-only\" style tolerance that could happen here, or if this is an issue i've misunderstood from the jump.",
       "createdAt": "2025-04-14T12:34:31Z",
-      "updatedAt": "2025-04-14T12:34:31Z",
+      "updatedAt": "2025-04-15T13:01:06Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "bumblefudge",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Also note: copying [this section](https://www.ietf.org/archive/id/draft-rundgren-cbor-core-04.html#section-2.3.4) over from Rundgren's CBOR/c draft might simplify or complicate this issue; however this \"single object only\" rule is decided, we should remember to update this section accordingly.",
+          "createdAt": "2025-04-15T13:01:05Z",
+          "updatedAt": "2025-04-15T13:01:05Z"
+        }
+      ]
     },
     {
       "number": 3,
       "id": "I_kwDOOZP3QM6yZTcH",
       "title": "Tag42 typing minutae: is it an integer, or a bytestring that is as many bytes long as an 8-bit INT?",
       "url": "https://github.com/ipfs-tech/cborc42/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bumblefudge",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The DAG-CBOR spec mentions, on the subject of tag 42 CID links, that they are always prefixed `0xd82a`, \"where 0xd8 is \"major type 6 with **8-bit integer** to follow\" and 0x2a is the number 42\". The [CID spec](https://github.com/multiformats/cid?tab=readme-ov-file#how-does-it-work) describes CIDs in their underlining binary format as a bytestring, not as an integer, so I am wondering if tag42 values should be treated as bytestrings of 8-bit-integer length or as integers with leading zeros (which would, of course, break the encoding rules if prefixed as integers!)",
       "createdAt": "2025-04-14T12:49:49Z",
-      "updatedAt": "2025-04-14T12:49:49Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-04-16T10:18:48Z",
+      "closedAt": "2025-04-16T10:18:47Z",
+      "comments": [
+        {
+          "author": "bumblefudge",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "whoops this was a very silly misunderstanding",
+          "createdAt": "2025-04-16T10:18:47Z",
+          "updatedAt": "2025-04-16T10:18:47Z"
+        }
+      ]
     },
     {
       "number": 4,
       "id": "I_kwDOOZP3QM6yZbeY",
       "title": "Add any nuance to float reduction and round-tripping?",
       "url": "https://github.com/ipfs-tech/cborc42/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bumblefudge",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Note that ATProto just has a flat \"no floats\" policy, to simplify! We could discourage floats but still allow them to be valid on encode/decode, or ban on encode but expect parsers not to barf on...",
       "createdAt": "2025-04-14T13:01:47Z",
-      "updatedAt": "2025-04-14T13:01:47Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-04-16T10:21:04Z",
+      "closedAt": "2025-04-16T10:21:02Z",
+      "comments": [
+        {
+          "author": "bumblefudge",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I feel like this was mostly addressed in [e26ac389858f64bf43e1de7191d4a4b7e7f4acdc](https://github.com/ipfs-tech/cborc42/commit/e26ac389858f64bf43e1de7191d4a4b7e7f4acdc) so closing for now",
+          "createdAt": "2025-04-16T10:21:02Z",
+          "updatedAt": "2025-04-16T10:21:02Z"
+        }
+      ]
     },
     {
       "number": 5,
       "id": "I_kwDOOZP3QM6yZdGm",
       "title": "Move some requirements or suggestions to an ALDR appendix?",
       "url": "https://github.com/ipfs-tech/cborc42/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bumblefudge",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Such things as \"no floats\" or \"DASL-only CIDs\" could be moved to an ALDR appendix? That is perhaps the best place to move things if we want 100% of CBOR wisdom to reside in a single document, but it turns out that at the CDE/CBOR/c level it doesn't make sense to include such recommendations. Downside: readers outside the CBOR WG might be baffled or skip it assuming it wouldn't be in an appendix if it was important.",
       "createdAt": "2025-04-14T13:04:17Z",
-      "updatedAt": "2025-04-14T13:04:17Z",
+      "updatedAt": "2025-04-16T10:16:01Z",
+      "closedAt": "2025-04-16T10:15:59Z",
+      "comments": [
+        {
+          "author": "bumblefudge",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "commits [0b7a01d0ef1d419a6bc0489fa3a3b524601bc958](https://github.com/ipfs-tech/cborc42/commit/0b7a01d0ef1d419a6bc0489fa3a3b524601bc958) and [c7a9c9dab1f84534f2d839f5fec1f9e5bb9d7794](https://github.com/ipfs-tech/cborc42/commit/c7a9c9dab1f84534f2d839f5fec1f9e5bb9d7794) mostly covered this, so closing for now, but will reopen a more focused issue",
+          "createdAt": "2025-04-16T10:16:00Z",
+          "updatedAt": "2025-04-16T10:16:00Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOOZP3QM6yj0hO",
+      "title": "Someone smarter than me should check the Floating Point test vectors chart forked from the CBOR/c spec",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/6",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For reasons I can't understand, many comments near the end of [the floating-point test vectors](https://www.ietf.org/archive/id/draft-rundgren-cbor-core-04.html#appendix-A.2) imply that those vectors should be `float16` or `float32` but are clearly provided as `float64`s instead; might just be a typo but someone smart than me should make sure (and ideally also file an issue or respond to Anders' [email on the list](https://mailarchive.ietf.org/arch/msg/cbor/LBctREmFf464K8jVk8sL_DMtO-A/) if it's his typo and not something i should be understanding!)",
+      "createdAt": "2025-04-15T09:10:50Z",
+      "updatedAt": "2025-04-16T10:09:18Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOOZP3QM6yw6Ht",
+      "title": "Should ALDRs be provided for non-DASL CIDs, for blake3 CIDs, and/or for forcetyping non-string map keys?",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/7",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "none of the three seem important to review by CBOR librarians and tool builders, but might be useful to add later if app-level folks are reading this",
+      "createdAt": "2025-04-16T10:17:12Z",
+      "updatedAt": "2025-04-16T10:17:12Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOOZP3QM6yw6_0",
+      "title": "Clean up test vectors",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/8",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I was pressed for time and never figured out what `0.0` and `-0.0` are forcetyped to `float64` in the floating-point chart, and it would probably also be good to add some normal CBOR major types and tags other than date in the \"Invalid\" table as a reminder",
+      "createdAt": "2025-04-16T10:18:23Z",
+      "updatedAt": "2025-04-16T10:18:23Z",
       "closedAt": null,
       "comments": []
     }
