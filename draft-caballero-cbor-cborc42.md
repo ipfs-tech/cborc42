@@ -194,7 +194,7 @@ Due to considerable variations between platforms, corresponding encoder API supp
 
 ### Media Type
 
-Protocols building on CBOR/c, are RECOMMENDED using the media type `application/cbor` in non-web contexts, and `application/octet-stream` over web transports.
+Protocols transmitting CBOR/c-42 over HTTP interfaces are RECOMMENDED to send all CBOR/c-42 data with a media type header of `application/cbor`.
 
 ### Diagnostic Notation
 
