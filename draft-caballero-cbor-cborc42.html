@@ -1599,7 +1599,7 @@ Because of the reduced range of types and tags, many of the tooling requirements
           <h4 id="name-media-type">
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-media-type" class="section-name selfRef">Media Type</a>
           </h4>
-<p id="section-2.3.2-1">Protocols building on CBOR/c, are <span class="bcp14">RECOMMENDED</span> using the media type <code>application/cbor</code> in non-web contexts, and <code>application/octet-stream</code> over web transports.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-1">Protocols transmitting CBOR/c-42 over HTTP interfaces are <span class="bcp14">RECOMMENDED</span> to send all CBOR/c-42 data with a media type header of <code>application/cbor</code>.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="diagnostic-notation">
@@ -1871,47 +1871,47 @@ As such, these should be considered as an understudied security surface for the 
       <h2 id="name-binary-content-identifiers">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-binary-content-identifiers" class="section-name selfRef">Binary Content Identifiers</a>
       </h2>
-<p id="appendix-A-1">A simple hash-based "content identifier" is used to link documents in the graph for which CBOR/c-42 was designed, and tag 42 was registered specifically for those link identifiers.
-Being able to navigate or generate new links in this graph are strictly unrelated concerns and of course optional for a CBOR/c-42 encoder and decoder, so this entire section is non-normative and provided informationally for the purposes of making less opaque the bytestrings marked by tag 42.
-Some CBOR/c-42 parsers may want to introspect the tag 42 values, if only to know which dereference to other CBOR/c-42 (or vanilla CBOR) documents.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2">Note: this describes tag-42 values from the perspective of the CBOR documents in which they are embedded; a simpler, "application developer"-oriented overview of content identifiers can be found at <span>[<a href="#DASL.ING" class="cite xref">DASL.ING</a>]</span>.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
-<p id="appendix-A-3">The format consists of a few sigils prepended to a hash of the linked document; there are many possible values for these sigils but these are like CBOR tags, extension points rather than required features of the system.
+<p id="appendix-A-1">A simple hash-based "content identifier" is used to link documents in the graph for which CBOR/c-42 was designed, and tag 42 was registered specifically for those link identifiers in the IANA registry, "Concise Binary Object Representation (CBOR) Tags" created by <a href="https://datatracker.ietf.org/doc/html/rfc8949#section-9.2">Section 9.2</a> of <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Being able to navigate or generate new links in this graph are strictly unrelated concerns and of course optional for a CBOR/c-42 encoder and decoder, so this entire section is non-normative and provided informationally for the purposes of making less opaque the bytestrings marked by tag 42.
+Some CBOR/c-42 parsers may want to introspect the tag 42 values, if only to know which dereference to other CBOR/c-42 (or vanilla CBOR) documents.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<p id="appendix-A-3">Note: this describes tag-42 values from the perspective of the CBOR documents in which they are embedded; a simpler, "application developer"-oriented overview of content identifiers can be found at <span>[<a href="#DASL.ING" class="cite xref">DASL.ING</a>]</span>.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+<p id="appendix-A-4">The format consists of a few sigils prepended to a hash of the linked document; there are many possible values for these sigils but these are like CBOR tags, extension points rather than required features of the system.
 All the sigils and the hash are of variable length, encoded as Self-Delimiting Numeric Values (<span>[<a href="#RFC6256" class="cite xref">RFC6256</a>]</span>).
-The sequence of segments is as follows:<a href="#appendix-A-3" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-A-4">
-<li id="appendix-A-4.1">
-          <p id="appendix-A-4.1.1">Mandatory padding byte <code>0x00</code>. This is required for interoperability with non-CBOR CID systems and for historical reasons (see Legacy Support section below).<a href="#appendix-A-4.1.1" class="pilcrow">¶</a></p>
+The sequence of segments is as follows:<a href="#appendix-A-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A-5">
+<li id="appendix-A-5.1">
+          <p id="appendix-A-5.1.1">Mandatory padding byte <code>0x00</code>. This is required for interoperability with non-CBOR CID systems and for historical reasons (see Legacy Support section below).<a href="#appendix-A-5.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li id="appendix-A-4.2">
-          <p id="appendix-A-4.2.1">Version byte: <code>0x01</code> is the only value worth attempting to parse in a general-purpose tool.  <code>0x00</code> refers to a legacy form explained below, with <code>0x02</code> and <code>0x03</code> reserved for potential future use.<a href="#appendix-A-4.2.1" class="pilcrow">¶</a></p>
+        <li id="appendix-A-5.2">
+          <p id="appendix-A-5.2.1">Version byte: <code>0x01</code> is the only value worth attempting to parse in a general-purpose tool.  <code>0x00</code> refers to a legacy form explained below, with <code>0x02</code> and <code>0x03</code> reserved for potential future use.<a href="#appendix-A-5.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li id="appendix-A-4.3">
-          <p id="appendix-A-4.3.1">A contextualizing sigil roughly mapping to content types, with the canonical registry governed by a community registry called <span>[<a href="#MULTIFORMATS" class="cite xref">MULTIFORMATS</a>]</span>. The only values that all CBOR/c-42 decoders need to recognize are:<a href="#appendix-A-4.3.1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-A-4.3.2">
-<li id="appendix-A-4.3.2.1">
-              <p id="appendix-A-4.3.2.1.1"><code>0x71</code> - CBOR/c-42<a href="#appendix-A-4.3.2.1.1" class="pilcrow">¶</a></p>
+        <li id="appendix-A-5.3">
+          <p id="appendix-A-5.3.1">A contextualizing sigil roughly mapping to content types, with the canonical registry governed by a community registry called <span>[<a href="#MULTIFORMATS" class="cite xref">MULTIFORMATS</a>]</span>. The only values that all CBOR/c-42 decoders need to recognize are:<a href="#appendix-A-5.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A-5.3.2">
+<li id="appendix-A-5.3.2.1">
+              <p id="appendix-A-5.3.2.1.1"><code>0x71</code> - CBOR/c-42<a href="#appendix-A-5.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li id="appendix-A-4.3.2.2">
-              <p id="appendix-A-4.3.2.2.1"><code>0x51</code> - Any other form of CBOR<a href="#appendix-A-4.3.2.2.1" class="pilcrow">¶</a></p>
+            <li id="appendix-A-5.3.2.2">
+              <p id="appendix-A-5.3.2.2.1"><code>0x51</code> - Any other form of CBOR<a href="#appendix-A-5.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li id="appendix-A-4.3.2.3">
-              <p id="appendix-A-4.3.2.3.1"><code>0x55</code> - Raw, unstructured binary<a href="#appendix-A-4.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-          </ol>
-</li>
-        <li id="appendix-A-4.4">
-          <p id="appendix-A-4.4.1">A hash-function sigil, drawn from the same registry. Likewise, the vast majority of values here are optional extensions; the required hash functions to be aware of are:<a href="#appendix-A-4.4.1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-A-4.4.2">
-<li id="appendix-A-4.4.2.1">
-              <p id="appendix-A-4.4.2.1.1"><code>0x12</code> - SHA-256<a href="#appendix-A-4.4.2.1.1" class="pilcrow">¶</a></p>
+            <li id="appendix-A-5.3.2.3">
+              <p id="appendix-A-5.3.2.3.1"><code>0x55</code> - Raw, unstructured binary<a href="#appendix-A-5.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
 </li>
-        <li id="appendix-A-4.5">
-          <p id="appendix-A-4.5.1">A hash-length (as SDNV).<a href="#appendix-A-4.5.1" class="pilcrow">¶</a></p>
+        <li id="appendix-A-5.4">
+          <p id="appendix-A-5.4.1">A hash-function sigil, drawn from the same registry. Likewise, the vast majority of values here are optional extensions; the required hash functions to be aware of are:<a href="#appendix-A-5.4.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-A-5.4.2">
+<li id="appendix-A-5.4.2.1">
+              <p id="appendix-A-5.4.2.1.1"><code>0x12</code> - SHA-256<a href="#appendix-A-5.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li id="appendix-A-4.6">
-          <p id="appendix-A-4.6.1">The hash (all remaining bytes).<a href="#appendix-A-4.6.1" class="pilcrow">¶</a></p>
+          </ol>
+</li>
+        <li id="appendix-A-5.5">
+          <p id="appendix-A-5.5.1">A hash-length (as SDNV).<a href="#appendix-A-5.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-A-5.6">
+          <p id="appendix-A-5.6.1">The hash (all remaining bytes).<a href="#appendix-A-5.6.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <div id="legacy-support">

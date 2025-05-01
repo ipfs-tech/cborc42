@@ -363,9 +363,9 @@ Table of Contents
 
 2.3.2.  Media Type
 
-   Protocols building on CBOR/c, are RECOMMENDED using the media type
-   application/cbor in non-web contexts, and application/octet-stream
-   over web transports.
+   Protocols transmitting CBOR/c-42 over HTTP interfaces are RECOMMENDED
+   to send all CBOR/c-42 data with a media type header of application/
+   cbor.
 
 2.3.3.  Diagnostic Notation
 
@@ -606,14 +606,18 @@ Appendix A.  Binary Content Identifiers
 
    A simple hash-based "content identifier" is used to link documents in
    the graph for which CBOR/c-42 was designed, and tag 42 was registered
-   specifically for those link identifiers.  Being able to navigate or
-   generate new links in this graph are strictly unrelated concerns and
-   of course optional for a CBOR/c-42 encoder and decoder, so this
-   entire section is non-normative and provided informationally for the
-   purposes of making less opaque the bytestrings marked by tag 42.
-   Some CBOR/c-42 parsers may want to introspect the tag 42 values, if
-   only to know which dereference to other CBOR/c-42 (or vanilla CBOR)
-   documents.
+   specifically for those link identifiers in the IANA registry,
+   "Concise Binary Object Representation (CBOR) Tags" created by
+   Section 9.2 (https://datatracker.ietf.org/doc/html/rfc8949#section-
+   9.2) of [RFC8949].
+
+   Being able to navigate or generate new links in this graph are
+   strictly unrelated concerns and of course optional for a CBOR/c-42
+   encoder and decoder, so this entire section is non-normative and
+   provided informationally for the purposes of making less opaque the
+   bytestrings marked by tag 42.  Some CBOR/c-42 parsers may want to
+   introspect the tag 42 values, if only to know which dereference to
+   other CBOR/c-42 (or vanilla CBOR) documents.
 
    Note: this describes tag-42 values from the perspective of the CBOR
    documents in which they are embedded; a simpler, "application
