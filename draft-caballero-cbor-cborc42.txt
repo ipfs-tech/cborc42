@@ -5,7 +5,7 @@
 Concise Binary Object Representation Maintenance and ExtensionsJ. Caballero
 Internet-Draft                                                 R. Berjon
 Intended status: Informational                           IPFS Foundation
-Expires: 18 October 2025                                   16 April 2025
+Expires: 2 November 2025                                      1 May 2025
 
 
                     The tag-42 profile of CBOR Core
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 October 2025.
+   This Internet-Draft will expire on 2 November 2025.
 
 Copyright Notice
 
@@ -205,8 +205,8 @@ Table of Contents
       compliant with Rule 2 in Section 4.2.2 of [RFC8949].
 
    *  RFC: Integers, represented by the int and bigint types, MUST use
-      the int type if the value is between -264 and 264-1, otherwise the
-      bigint type MUST be used.
+      the int type if the value is between -2^64 and 2^64-1, otherwise
+      the bigint type MUST be used.
 
       -  Appendix B.1 features a list of integer sample values and their
          expected encoding.
@@ -234,8 +234,8 @@ Table of Contents
       maintain uniqueness, there are no specific restrictions or tests
       needed in order to determine map key equivalence.  As an (extreme)
       example, the floating-point numbers 0.0 and -0.0, and the integer
-      number 0 could represent the distinct keys f90000, f98000, and 00
-      respectively.
+      number 0 could all get force-typed as three distinct strings (0.0,
+      -0.0, and 0) without colliding.
 
    *  RFC: Indefinite length objects MUST be rejected.
 
@@ -342,11 +342,12 @@ Table of Contents
        [RFC8949] introduces two variants of time objects using the CBOR
        tags 0 and 1, neither of which are supported by the CBOR/c-42
        data model for historical interoperability reasons.  To support
-       time encoding stably, EpochTime and/or DateTime MAY be supported
-       as strings at the application level or at the ALDR level.
-       Interoperability with other tooling may be difficult to achieve
-       if support for these APIs is desired, and validating dates at
-       higher layers may introduce new security issues at higher layers.
+       time encoding stably, it is RECOMMENDED that EpochTime and/or
+       DateTime types in input be force-typed as strings at the
+       application level or at the ALDR level.  Interoperability with
+       other tooling may be difficult to achieve if support for these
+       APIs is desired, and validating dates at higher layers may
+       introduce new security issues at higher layers.
 
    (Note that the preceding is a strict subset of the protocol
    primitives enumerated by CBOR/c.)
@@ -661,14 +662,15 @@ A.1.  Legacy Support
    malformed, and any attempt to recuperate legacy links or variations
    from such a value is entirely optional.
 
-   The most common variant of content identifiers is the historical v0
-   variety, which were always 34 bytes long and consisted only of
-   segments 4 (0x12), 5 (0x20, i.e. 32 bytes) and 6 above (a 32-byte
-   SHA256 hash).  Prepending 0x00 (padding byte), 0x01 (CID version),
-   0x70 (DAG-profiled protobuf) turns these into valid "v1" content
-   identifiers, although they still dereference to protobuffer objects
-   rather than CBOR objects.  For guidance on protobuf deserialization,
-   see protobuf.dev or the relevant [protobuf] draft RFC.
+   The most common form of legacy data from deprecated encodings is the
+   historical v0 form IPFS content identifiers, which were always 34
+   bytes long and consisted only of segments 4 (0x12), 5 (0x20, i.e. 32
+   bytes) and 6 above (a 32-byte SHA256 hash).  Prepending 0x00 (padding
+   byte), 0x01 (CID version), 0x70 (DAG-profiled protobuf) turns these
+   into valid "v1" content identifiers, although they still dereference
+   to protobuf objects rather than CBOR objects.  For guidance on
+   protobuf deserialization, see protobuf.dev or the relevant [protobuf]
+   draft RFC.
 
    Likewise, some specialized applications that can strictly assume
    segments 1-3 or 1-5 will be invariant systemwide have been observed
@@ -985,50 +987,50 @@ B.3.  Miscellaneous Items
 
 B.4.  Invalid Encodings
 
-   +========================+=====================+================+==+
-   |CBOR Encoding           |Diagnostic Notation  |Comment Notes   |  |
-   +========================+=====================+================+==+
-   |a2616201616100          |{ "b": 1, "a": 0 }   |Improper map key|1,|
-   |                        |                     |ordering        |2 |
-   +------------------------+---------------------+----------------+--+
-   |1900ff                  |255                  |Number with     |  |
-   |                        |                     |leading zero    |  |
-   |                        |                     |bytes           |  |
-   +------------------------+---------------------+----------------+--+
-   |c34a00010000000000000000|-18446744073709551617|Number with     |  |
-   |                        |                     |leading zero    |  |
-   |                        |                     |bytes           |  |
-   +------------------------+---------------------+----------------+--+
-   |Fa41280000              |10.5                 |Not in shortest |  |
-   |                        |                     |encoding        |  |
-   +------------------------+---------------------+----------------+--+
-   |c243010000              |65536                |Incorrect value |  |
-   |                        |                     |for bigint      |  |
-   +------------------------+---------------------+----------------+--+
-   |fa7fc00000              |NaN                  |Not in shortest |  |
-   |                        |                     |encoding        |  |
-   +------------------------+---------------------+----------------+--+
-   |f97e01                  |NaN                  |NaN with payload|  |
-   +------------------------+---------------------+----------------+--+
-   |f97e00                  |NaN                  |NaN disallowed  |  |
-   |                        |                     |even in shortest|  |
-   |                        |                     |encoding        |  |
-   +------------------------+---------------------+----------------+--+
-   |5f4101420203ff          |(_ h'01', h'0203')   |Indefinite      |  |
-   |                        |                     |length object   |  |
-   +------------------------+---------------------+----------------+--+
-   |fc                      |                     |Reserved        |  |
-   +------------------------+---------------------+----------------+--+
-   |f818                    |                     |Invalid simple  |  |
-   |                        |                     |value           |  |
-   +------------------------+---------------------+----------------+--+
-   |5b0010000000000000      |                     |Extremely large |  |
-   |                        |                     |bstr length     |  |
-   |                        |                     |indicator:      |  |
-   |                        |                     |4503599627370496|  |
-   +------------------------+---------------------+----------------+--+
+    +==========================+=====================+================+
+    | CBOR Encoding            |Diagnostic Notation  |Comment         |
+    +==========================+=====================+================+
+    | a2616201616100           |{ "b": 1, "a": 0 }   |Improper map key|
+    |                          |                     |ordering        |
+    +--------------------------+---------------------+----------------+
+    | 1900ff                   |255                  |Number with     |
+    |                          |                     |leading zero    |
+    |                          |                     |bytes           |
+    +--------------------------+---------------------+----------------+
+    | c34a00010000000000000000 |-18446744073709551617|Number with     |
+    |                          |                     |leading zero    |
+    |                          |                     |bytes           |
+    +--------------------------+---------------------+----------------+
+    | Fa41280000               |10.5                 |Not in shortest |
+    |                          |                     |encoding        |
+    +--------------------------+---------------------+----------------+
+    | c243010000               |65536                |Incorrect value |
+    |                          |                     |for bigint      |
+    +--------------------------+---------------------+----------------+
+    | fa7fc00000               |NaN                  |Not in shortest |
+    |                          |                     |encoding        |
+    +--------------------------+---------------------+----------------+
+    | f97e01                   |NaN                  |NaN with payload|
+    +--------------------------+---------------------+----------------+
+    | f97e00                   |NaN                  |NaN disallowed  |
+    |                          |                     |even in shortest|
+    |                          |                     |encoding        |
+    +--------------------------+---------------------+----------------+
+    | 5f4101420203ff           |(_ h'01', h'0203')   |Indefinite      |
+    |                          |                     |length object   |
+    +--------------------------+---------------------+----------------+
+    | fc                       |                     |Reserved        |
+    +--------------------------+---------------------+----------------+
+    | f818                     |                     |Invalid simple  |
+    |                          |                     |value           |
+    +--------------------------+---------------------+----------------+
+    | 5b0010000000000000       |                     |Extremely large |
+    |                          |                     |bstr length     |
+    |                          |                     |indicator:      |
+    |                          |                     |4503599627370496|
+    +--------------------------+---------------------+----------------+
 
-                                 Table 7
+                                  Table 7
 
 Appendix C.  Configuration and ALDRs
 
