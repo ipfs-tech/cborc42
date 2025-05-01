@@ -419,7 +419,6 @@ When decoding CBOR data encoded without observing the rules defined above, it re
 A CBOR/c-42 application or encoder has no obligation to support re-encoding of such non-profile data according to these looser rules, however, and roundtrip-translation is unlikely to be guaranteed as this was a non-goal of the original design.
 
 # Acknowledgments
-
 {:numbered="false"}
 
 TODO acknowledge.
