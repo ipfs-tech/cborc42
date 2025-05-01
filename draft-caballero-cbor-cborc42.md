@@ -112,9 +112,9 @@ This section describes how CBOR/c-42 subsets CBOR and differs from a standard CD
 
 | CBOR | Comment |
 | --- | --- |
-| int |	Integer |
+| int | Integer |
 | bigint | Big integer |
-| float	| 64-bit [IEEE754] numbers ONLY |
+| float | 64-bit [IEEE754] numbers ONLY |
 | tstr | Text string encoded as UTF-8 [RFC3629] |
 | bstr | Byte string |
 | [] | Array |
@@ -139,7 +139,7 @@ As in CBOR/c, deterministic encoding is mandatory. The encoding scheme adheres t
   "b": ... ,
   "aa": ...
 }
-- RFC+: Since CBOR encodings according to this specification maintain uniqueness, there are no specific restrictions or tests needed in order to determine map key equivalence. As an (extreme) example, the floating-point numbers 0.0 and -0.0, and the integer number 0 could represent the distinct keys f90000, f98000, and 00 respectively.
+- RFC+: Since CBOR encodings according to this specification maintain uniqueness, there are no specific restrictions or tests needed in order to determine map key equivalence. As an (extreme) example, the floating-point numbers 0.0 and -0.0, and the integer number 0 could all get force-typed as three distinct strings (`0.0`, `-0.0`, and `0`) without colliding.
 - RFC: Indefinite length objects MUST be rejected.
 
 ## CBOR Tool Requirements
@@ -296,7 +296,7 @@ This is not best practice but can also serve as some explanation for the padding
 
 ## Integers
 
-| Diagnostic Notation	| CBOR Encoding |	Comment |
+| Diagnostic Notation | CBOR Encoding | Comment |
 |---|---|---|
 |0 | 00 | Smallest positive implicit int|
 |-1 | 20 | Smallest negative implicit int|
@@ -389,9 +389,9 @@ The textual representation of the values is based on the serialization method fo
 
 ## Invalid Encodings
 
-| CBOR Encoding | Diagnostic Notation | Comment Notes |
+| CBOR Encoding | Diagnostic Notation | Comment |
 |----|----|----|
-| a2616201616100 | { "b": 1, "a": 0 } | Improper map key ordering | 1, 2 |
+| a2616201616100 | { "b": 1, "a": 0 } | Improper map key ordering |
 | 1900ff | 255 | Number with leading zero bytes |
 | c34a00010000000000000000 | -18446744073709551617 | Number with leading zero bytes |
 | Fa41280000 | 10.5 | Not in shortest encoding |
@@ -419,6 +419,7 @@ When decoding CBOR data encoded without observing the rules defined above, it re
 A CBOR/c-42 application or encoder has no obligation to support re-encoding of such non-profile data according to these looser rules, however, and roundtrip-translation is unlikely to be guaranteed as this was a non-goal of the original design.
 
 # Acknowledgments
+
 {:numbered="false"}
 
 TODO acknowledge.
