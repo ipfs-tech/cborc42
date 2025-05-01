@@ -128,7 +128,7 @@ This section describes how CBOR/c-42 subsets CBOR and differs from a standard CD
 As in CBOR/c, deterministic encoding is mandatory. The encoding scheme adheres to Section 4.2 of [RFC8949], but adds a few constraints (denoted below by RFC+), where this RFC offers choices. The following list contains a summary of the deterministic encoding rules:
 
 - RFC+: Floating-point and integer objects MUST be treated as distinct types regardless of their numeric value. This is compliant with Rule 2 in Section 4.2.2 of [RFC8949].
-- RFC: Integers, represented by the int and bigint types, MUST use the int type if the value is between -264 and 264-1, otherwise the bigint type MUST be used.
+- RFC: Integers, represented by the int and bigint types, MUST use the int type if the value is between -2^64 and 2^64-1, otherwise the bigint type MUST be used.
   - Appendix B.1 features a list of integer sample values and their expected encoding.
 - RFC+: UNLIKE CBOR/c and standard CDE encoding, floating-point numbers MUST always be encoded using the longest [IEEE754] variant. Appendix B.2 features a list of floating-point sample values and their expected encoding.
 - RFC+: NaN values with payloads (like f97e01), or having the most significant bit set ("signaling"), MUST be rejected. See also Appendix B.4 for invalid NaN variants.
@@ -184,7 +184,7 @@ To facilitate cross-platform protocol interoperability, implementers of CBOR/c-4
 3. Some platforms do not natively support float32 and/or float16. In this case a hypothetical getFloat16() would need to use a bigger floating-point type for the return value. Note that a hypothetical getFloat16() MUST reject encountered Float32 and Float64 objects. See also Appendix C.
 4. Since a CBOR null typically represents the absence of a value, a decoder MUST provide a test-function, like isNull().
 5. Simple values in CBOR and CBOR/c include the ranges 0-23 and 32-255, all but three of which are invalid in CBOR/c-42; however, the capability to refer to boolean values (i.e. `true` and `false`) and `null` as major-type 7 simple values MUST be supported to guarantee interoperability with CBOR tooling generally.
-6. Since CBOR lacks a native-level time object, Section 3.4 of [RFC8949] introduces two variants of time objects using the CBOR tags 0 and 1, neither of which are supported by the CBOR/c-42 data model for historical interoperability reasons. To support time encoding stably, EpochTime and/or DateTime MAY be supported as strings at the application level or at the ALDR level. Interoperability with other tooling may be difficult to achieve if support for these APIs is desired, and validating dates at higher layers may introduce new security issues at higher layers.
+6. Since CBOR lacks a native-level time object, Section 3.4 of [RFC8949] introduces two variants of time objects using the CBOR tags 0 and 1, neither of which are supported by the CBOR/c-42 data model for historical interoperability reasons. To support time encoding stably, it is RECOMMENDED that EpochTime and/or DateTime types in input be force-typed as strings at the application level or at the ALDR level. Interoperability with other tooling may be difficult to achieve if support for these APIs is desired, and validating dates at higher layers may introduce new security issues at higher layers.
 
 (Note that the preceding is a strict subset of the protocol primitives enumerated by CBOR/c.)
 
@@ -285,8 +285,8 @@ The sequence of segments is as follows:
 
 Any tag 42 value that does NOT begin with `0x00` can be considered malformed, and any attempt to recuperate legacy links or variations from such a value is entirely optional.
 
-The most common variant of content identifiers is the historical v0 variety, which were always 34 bytes long and consisted only of segments 4 (`0x12`), 5 (`0x20`, i.e. 32 bytes) and 6 above (a 32-byte SHA256 hash).
-Prepending `0x00` (padding byte), `0x01` (CID version), `0x70` (DAG-profiled protobuf) turns these into valid "v1" content identifiers, although they still dereference to protobuffer objects rather than CBOR objects.
+The most common form of legacy data from deprecated encodings is the historical v0 form IPFS content identifiers, which were always 34 bytes long and consisted only of segments 4 (`0x12`), 5 (`0x20`, i.e. 32 bytes) and 6 above (a 32-byte SHA256 hash).
+Prepending `0x00` (padding byte), `0x01` (CID version), `0x70` (DAG-profiled protobuf) turns these into valid "v1" content identifiers, although they still dereference to protobuf objects rather than CBOR objects.
 For guidance on protobuf deserialization, see protobuf.dev or the relevant [protobuf] draft RFC.
 
 Likewise, some specialized applications that can strictly assume segments 1-3 or 1-5 will be invariant systemwide have been observed to use "truncated" content identifiers, prepending the invariant prefixes only in transformations at point of egress for interoperability purposes.
