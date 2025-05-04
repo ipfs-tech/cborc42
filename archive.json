@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-01T01:23:00.309246+00:00",
+  "timestamp": "2025-05-04T01:23:42.315664+00:00",
   "repo": "ipfs-tech/cborc42",
   "labels": [
     {
@@ -207,6 +207,22 @@
       "body": "I was pressed for time and never figured out what `0.0` and `-0.0` are forcetyped to `float64` in the floating-point chart, and it would probably also be good to add some normal CBOR major types and tags other than date in the \"Invalid\" table as a reminder",
       "createdAt": "2025-04-16T10:18:23Z",
       "updatedAt": "2025-04-16T10:18:23Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOOZP3QM60z5bj",
+      "title": "Diagnostic Notation section - more trouble and disagreement than it's worth?",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/9",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "When I modeled this document on the CBOR/c RFC draft, it seemed an important interop and objectivity tool to have that section, but as someone who's never built a parser or a library I am way out of my depth even confirming that this section is viable. I guess I would want to hear from others if there is anything in this section that needs changing if it's staying, and I would want to hear about the downside to including it if it's not staying?",
+      "createdAt": "2025-05-01T09:22:18Z",
+      "updatedAt": "2025-05-01T09:22:50Z",
       "closedAt": null,
       "comments": []
     }
