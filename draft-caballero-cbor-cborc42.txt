@@ -1076,7 +1076,20 @@ Appendix D.  Decoding Strictness
 
 Acknowledgments
 
-   TODO acknowledge.
+   The authors would like to thank for their guidance over a long period
+   on this and related projects:
+
+   *  Carsten Bormann
+
+   *  Paul Hoffman
+
+   *  Dirk Kutscher
+
+   *  Volker Mische
+
+   *  Marcin Rataj
+
+   *  Rod Vagg
 
 Authors' Addresses
 
