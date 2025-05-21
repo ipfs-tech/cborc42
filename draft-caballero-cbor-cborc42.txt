@@ -5,7 +5,7 @@
 Concise Binary Object Representation Maintenance and ExtensionsJ. Caballero
 Internet-Draft                                                 R. Berjon
 Intended status: Informational                           IPFS Foundation
-Expires: 2 November 2025                                      1 May 2025
+Expires: 22 November 2025                                    21 May 2025
 
 
                     The tag-42 profile of CBOR Core
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 November 2025.
+   This Internet-Draft will expire on 22 November 2025.
 
 Copyright Notice
 
