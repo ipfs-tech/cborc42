@@ -422,4 +422,11 @@ A CBOR/c-42 application or encoder has no obligation to support re-encoding of s
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The authors would like to thank for their guidance over a long period on this and related projects:
+
+- Carsten Bormann
+- Paul Hoffman
+- Dirk Kutscher
+- Volker Mische
+- Marcin Rataj
+- Rod Vagg
