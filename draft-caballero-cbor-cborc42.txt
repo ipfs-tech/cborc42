@@ -640,10 +640,9 @@ Appendix A.  Binary Content Identifiers
        a general-purpose tool.  0x00 refers to a legacy form explained
        below, with 0x02 and 0x03 reserved for potential future use.
 
-   3.  A contextualizing sigil roughly mapping to content types, with
-       the canonical registry governed by a community registry called
-       [MULTIFORMATS].  The only values that all CBOR/c-42 decoders need
-       to recognize are:
+   3.  A contextualizing sigil roughly mapping to content types taken
+       from a community registry called [MULTIFORMATS].  The only values
+       that all CBOR/c-42 decoders need to recognize are:
 
        1.  0x71 - CBOR/c-42
 
