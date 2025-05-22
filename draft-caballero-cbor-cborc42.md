@@ -273,7 +273,7 @@ The sequence of segments is as follows:
 
 1. Mandatory padding byte `0x00`. This is required for interoperability with non-CBOR CID systems and for historical reasons (see Legacy Support section below).
 2. Version byte: `0x01` is the only value worth attempting to parse in a general-purpose tool.  `0x00` refers to a legacy form explained below, with `0x02` and `0x03` reserved for potential future use.
-3. A contextualizing sigil roughly mapping to content types, with the canonical registry governed by a community registry called [MULTIFORMATS]. The only values that all CBOR/c-42 decoders need to recognize are:
+3. A contextualizing sigil roughly mapping to content types taken from a community registry called [MULTIFORMATS]. The only values that all CBOR/c-42 decoders need to recognize are:
    1. `0x71` - CBOR/c-42
    2. `0x51` - Any other form of CBOR
    3. `0x55` - Raw, unstructured binary
