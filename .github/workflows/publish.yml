@@ -17,18 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # See https://github.com/actions/checkout/issues/290
     - name: "Get Tag Annotations"
-      run: git fetch -f --update-head-ok origin ${{ github.ref }}:${{ github.ref }}
+      run: git fetch -f origin ${{ github.ref }}:${{ github.ref }}
 
     - name: "Setup"
       id: setup
       run: date -u "+date=%FT%T" >>"$GITHUB_OUTPUT"
 
     - name: "Caching"
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           .refcache
