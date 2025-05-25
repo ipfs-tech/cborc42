@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-22T01:18:18.291624+00:00",
+  "timestamp": "2025-05-25T01:25:05.084323+00:00",
   "repo": "ipfs-tech/cborc42",
   "labels": [
     {
@@ -223,6 +223,22 @@
       "body": "When I modeled this document on the CBOR/c RFC draft, it seemed an important interop and objectivity tool to have that section, but as someone who's never built a parser or a library I am way out of my depth even confirming that this section is viable. I guess I would want to hear from others if there is anything in this section that needs changing if it's staying, and I would want to hear about the downside to including it if it's not staying?",
       "createdAt": "2025-05-01T09:22:18Z",
       "updatedAt": "2025-05-01T09:22:50Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOOZP3QM63wdpL",
+      "title": "Publishing to Datatracker glitching out",
+      "url": "https://github.com/ipfs-tech/cborc42/issues/10",
+      "state": "OPEN",
+      "author": "bumblefudge",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Something is screwy with how github actions interact with tags, and no combination of defining tags in { github.com GUI or `git tag -a` then `git push --tags`}, defining releases various ways, etc seems to make the publish.yml action work.  I gave up and just used [the author-tools converter from the .txt make spits out](https://author-tools.ietf.org/), edited the xml output (-latest --> -00 in rfcName), and uploaded it directly to datatracker for version 00, but maybe someone who's good at all this can figure out what i'm doing wrong to use martin's tool to publish straight from github.",
+      "createdAt": "2025-05-22T10:46:41Z",
+      "updatedAt": "2025-05-22T10:46:41Z",
       "closedAt": null,
       "comments": []
     }
