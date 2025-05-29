@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-27T01:17:40.299153+00:00",
+  "timestamp": "2025-05-29T01:19:03.226661+00:00",
   "repo": "ipfs-tech/cborc42",
   "labels": [
     {
@@ -243,5 +243,42 @@
       "comments": []
     }
   ],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 11,
+      "id": "PR_kwDOOZP3QM6XvNof",
+      "title": "\ud83d\udc85 atproto and bluesky terms (minor)",
+      "url": "https://github.com/ipfs-tech/cborc42/pull/11",
+      "state": "MERGED",
+      "author": "bnewbold",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\"Bluesky\" (the company and the app) consistently does not use any special capitalization (eg, does not use \"BlueSky\").\r\n\r\nThe name of the protocol is \"Authenticated Transfer Protocol\", or \"AT Protocol\", or \"atproto\".",
+      "createdAt": "2025-05-27T08:23:05Z",
+      "updatedAt": "2025-05-27T08:36:47Z",
+      "baseRepository": "ipfs-tech/cborc42",
+      "baseRefName": "main",
+      "baseRefOid": "e2b0835d0cda37088ab80c983f97f9bd9e7000cb",
+      "headRepository": "bnewbold/cborc42-patches",
+      "headRefName": "minor-bsky-terms",
+      "headRefOid": "d1f7e4a1d5a8d4abd0e6e86a5c0bf569bab8d807",
+      "closedAt": "2025-05-27T08:36:40Z",
+      "mergedAt": "2025-05-27T08:36:40Z",
+      "mergedBy": "bumblefudge",
+      "mergeCommit": {
+        "oid": "9514e2ff5ea37b1c0e3952367421baa8ca3f7cb4"
+      },
+      "comments": [
+        {
+          "author": "bumblefudge",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@bnewbold thank you for proper deployment of the \ud83d\udc85 emoji",
+          "createdAt": "2025-05-27T08:36:46Z",
+          "updatedAt": "2025-05-27T08:36:46Z"
+        }
+      ],
+      "reviews": []
+    }
+  ]
 }
